@@ -55,11 +55,10 @@
     const Download = (p) => <SvgIcon className={p.className} d='<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>'/>;
     const CloudUpload = (p) => <SvgIcon className={p.className} d='<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line>'/>;
     const Loader2 = (p) => <SvgIcon className={p.className} d='<path d="M21 12a9 9 0 1 1-6.219-8.56"></path>'/>;
-    const FileDown = (p) => <SvgIcon className={p.className} d='<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><polyline points="9 15 12 18 15 15"></polyline>'/>;
-    const FileUp = (p) => <SvgIcon className={p.className} d='<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="12" x2="12" y2="18"></line><polyline points="9 15 12 12 15 15"></polyline>'/>;
+    const ImageIcon = (p) => <SvgIcon className={p.className} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>'/>;
+    const LinkIcon = (p) => <SvgIcon className={p.className} d='<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>'/>;
     const PanelLeftClose = (p) => <SvgIcon className={p.className} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><polyline points="14 15 11 12 14 9"></polyline>'/>;
     const PanelLeftOpen = (p) => <SvgIcon className={p.className} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><polyline points="11 9 14 12 11 15"></polyline>'/>;
-    const MoreHorizontal = (p) => <SvgIcon className={p.className} d='<circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle>'/>;
 
     // --- 設定檔 (Themes & Palettes) ---
     const PALETTES = [
@@ -89,120 +88,72 @@
       { id: 'spotlight', name: '10. 焦點匯聚 (舞台與權威)' },
     ];
 
-    // ==========================================
-    // 情境模板 (SCENARIOS)
-    // ==========================================
     const SCENARIOS = [
       {
         id: 'elevator', name: '🚀 極速電梯 (說服)',
         slides: [
-          { layout: 'cover', title: '極速說服提案', content: '（副標題 / 演講者）' },
-          { layout: 'title_only', title: '直擊痛點', content: '（請寫出一句震撼人心的痛點問句）\n例如：你還在用人力做無效的重複勞動嗎？' },
-          { layout: 'split_column', title: '解決方案對比', content: '傳統解法\n- 耗時費力\n- 成本高昂\n- 容易出錯\n|\n我們的顛覆性解法\n- 全自動化\n- 節省 80% 成本\n- 零誤差' },
-          { layout: 'title_only', title: '現在就開始改變！', content: '（強烈行動呼籲 Call to Action）\n請掃碼或點擊連結' }
-        ]
-      },
-      {
-        id: 'pain_point', name: '🎯 痛點行銷 (提案)',
-        slides: [
-          { layout: 'cover', title: '行銷提案簡報', content: '為您的痛點提供完美解方' },
-          { layout: 'standard_list', title: '客戶的三大痛點', content: '- 痛點一：效率低落\n- 痛點二：獲客成本居高不下\n- 痛點三：客戶留存率偏低' },
-          { layout: 'title_only', title: '我們的核心產品理念', content: '（在此用一句話宣告理念）' },
-          { layout: 'split_column', title: '優劣勢對比', content: '競品劣勢\n- 功能單一\n- 缺乏在地化支援\n- 擴充性差\n|\n我們優勢\n- 全方位模組化整合\n- 24/7 專人技術服務\n- 隨需擴充' },
-          { layout: 'standard_list', title: '下一步合作計畫', content: '- 第 1 週：深入需求訪談\n- 第 2 週：客製化系統建置\n- 第 3 週：上線測試與教學' }
-        ]
-      },
-      {
-        id: 'ted', name: '💡 TED演講 (啟發)',
-        slides: [
-          { layout: 'cover', title: '啟發性演講 (TED 風格)', content: '（講者姓名）' },
-          { layout: 'title_only', title: '我們一直以來都想錯了。', content: '（請放入一句反直覺的震撼金句）' },
-          { layout: 'standard_list', title: '故事的三個轉折', content: '- 意料之外的開端\n- 陷入谷底的困境\n- 破繭而出的覺醒' },
-          { layout: 'split_column', title: '迷思與真相', content: '迷思 (Myth)\n- 努力就一定能成功\n- 失敗是可恥的標籤\n|\n真相 (Reality)\n- 選擇的方向比努力更重要\n- 失敗是通往成功的必經之路' },
-          { layout: 'title_only', title: '改變世界，從今天開始。', content: '（感人且發人深省的結尾）' }
-        ]
-      },
-      {
-        id: 'data', name: '📊 數據洞察 (分析)',
-        slides: [
-          { layout: 'cover', title: '季度數據分析報告', content: '透過數據看見未來趨勢' },
-          { layout: 'title_only', title: '本期最大發現', content: '行動端營收首度超越桌面端，佔比高達 65%！' },
-          { layout: 'split_column', title: '同期現況比較', content: '去年同期\n- 總流量：100萬\n- 轉換率：1.5%\n- 客單價：$50\n|\n今年現況\n- 總流量：250萬\n- 轉換率：3.2%\n- 客單價：$85' },
-          { layout: 'split_column', title: '市場機會與潛在威脅', content: '市場機會\n- 競爭對手戰略退場\n- 新興法規上路帶動需求\n|\n潛在威脅\n- 原物料與物流成本上漲\n- 消費者喜好快速轉移' },
-          { layout: 'standard_list', title: '三個具體建議', content: '- 建議一：加大行動端廣告投放預算\n- 建議二：優化結帳流程以減少跳出率\n- 建議三：舉辦限時促銷活動清理庫存' }
-        ]
-      },
-      {
-        id: 'kickoff', name: '🏁 專案啟動 (Kickoff)',
-        slides: [
-          { layout: 'cover', title: '專案啟動會議 (Kickoff)', content: 'Project Kickoff Meeting' },
-          { layout: 'title_only', title: '打造業界第一的智慧平台', content: '（專案的最終願景）' },
-          { layout: 'standard_list', title: '三大核心目標', content: '- 目標一：今年 Q3 順利上線\n- 目標二：首月達成十萬活躍用戶\n- 目標三：確保系統穩定度達 99.9%' },
-          { layout: 'split_column', title: '團隊責任分配', content: '技術團隊\n- 系統架構設計與基礎建設\n- 核心功能開發與測試\n|\n業務團隊\n- 市場需求定義與定價策略\n- 首波種子用戶推廣與回饋收集' },
-          { layout: 'standard_list', title: '時程表 (Timeline)', content: '- 4月：需求訪談與 UI/UX 設計\n- 5月：核心系統開發\n- 6月：內部封測與修正\n- 7月：正式對外發佈' },
-          { layout: 'title_only', title: "Let's Go!", content: '全力以赴，共創佳績！' }
-        ]
-      },
-      {
-        id: 'decision', name: '⚖️ 決策天平 (評估)',
-        slides: [
-          { layout: 'cover', title: '決策評估報告', content: '策略兩難分析' },
-          { layout: 'title_only', title: '自建系統 vs 採購 SaaS', content: '（我們目前面臨的兩難抉擇）' },
-          { layout: 'split_column', title: '方案利弊分析', content: '方案A的利弊 (自建系統)\n- 利：高度客製化，資料完全掌握\n- 弊：開發時間極長、維護成本高\n|\n方案B的利弊 (採購 SaaS)\n- 利：快速導入，即刻發揮效益\n- 弊：受限於供應商框架，按月付費' },
-          { layout: 'standard_list', title: '最終建議方案', content: '- 建議採用：方案B (採購 SaaS)\n- 理由一：爭取 Time-to-Market 時間\n- 理由二：大幅降低初期建置的沉沒成本\n- 理由三：將內部研發人力專注於核心業務' }
-        ]
-      },
-      {
-        id: 'guide', name: '📖 新手指南 (SOP)',
-        slides: [
-          { layout: 'cover', title: '教育訓練與 SOP 教學', content: '快速上手指南' },
-          { layout: 'title_only', title: '學習目標', content: '掌握系統的核心操作流程，避免常見地雷。' },
-          { layout: 'split_column', title: '操作注意事項', content: '常見錯誤 (Don\'ts)\n- 忘記點擊右上角存檔\n- 忽略系統彈出的警告訊息\n- 密碼設定過於簡單\n|\n正確做法 (Dos)\n- 每個段落完成後隨時備份\n- 操作前詳閱官方手冊\n- 開啟雙重認證 (2FA)' },
-          { layout: 'standard_list', title: '標準操作步驟', content: '- 步驟 1：使用企業信箱登入系統\n- 步驟 2：前往控制面板設定基本資料\n- 步驟 3：建立第一個測試專案\n- 步驟 4：確認狀態亮綠燈後開始執行' },
-          { layout: 'title_only', title: '需要協助嗎？', content: '求助聯絡資訊：support@example.com / 分機號碼 8888' }
-        ]
-      },
-      {
-        id: 'okr', name: '🎯 OKR復盤 (回顧)',
-        slides: [
-          { layout: 'cover', title: 'OKR 季度復盤報告', content: '回顧過去，展望未來' },
-          { layout: 'split_column', title: '目標與達成率', content: '預期目標 (O)\n- 提升用戶整體滿意度\n- 擴大亞洲區市佔率\n|\n實際達成 (KR)\n- NPS 分數達 85 (✅ 達成)\n- 市佔率成長 5% (❌ 未達預期 10%)' },
-          { layout: 'standard_list', title: '本季最大亮點', content: '- 成功舉辦年度規模最大的線上發表會，參與人數破紀錄\n- 新版 UI 上線後，客戶流失率降至歷史新低\n- 技術團隊重構核心模組，載入速度提升 40%' },
-          { layout: 'split_column', title: '經驗總結', content: '成功經驗\n- 跨部門每週 Sync 會議非常有效\n- 導入敏捷開發大幅提升交付速度\n|\n失敗教訓\n- 前期需求定義不夠明確導致重工\n- 行銷預算與資源分配初期過於分散' },
-          { layout: 'title_only', title: '對下個季度的期許', content: '聚焦核心痛點，創造不可替代的價值。' }
-        ]
-      },
-      {
-        id: 'interview', name: '👋 面試自薦 (履歷)',
-        slides: [
-          { layout: 'cover', title: '個人品牌與面試介紹', content: '你的姓名 / 應徵職位' },
-          { layout: 'title_only', title: '持續學習，創造超乎預期的價值。', content: '（核心價值觀 / 個人 Slogan）' },
-          { layout: 'split_column', title: '核心能力矩陣', content: '硬實力 (專業技能)\n- 前端架構設計 (React, Vue, TS)\n- 後端微服務開發 (Node.js, Go)\n- 雲端部署與 CI/CD (AWS, Docker)\n|\n軟實力 (溝通管理)\n- 跨部門與利害關係人溝通\n- 敏捷專案時程控管 (Scrum Master)\n- 技術團隊培訓與 Mentorship' },
-          { layout: 'standard_list', title: '過去三大戰績', content: '- 戰績一：帶領團隊從零到一完成百萬流量電商架構\n- 戰績二：主導資料庫效能優化，查詢速度提升 500%\n- 戰績三：發起開源工具專案，獲得全球開發者超過 10k Stars' },
-          { layout: 'title_only', title: '感謝您的聆聽', content: 'Email: you@example.com | LinkedIn: /in/yourprofile' }
-        ]
-      },
-      {
-        id: 'roadmap', name: '🗺️ 未來藍圖 (願景)',
-        slides: [
-          { layout: 'cover', title: '願景與 Roadmap', content: '我們的未來藍圖' },
-          { layout: 'title_only', title: '成為該領域的全球標準制定者', content: '（三年後的終極願景）' },
-          { layout: 'split_column', title: '現況與未來', content: '我們現在在哪裡\n- 剛完成種子輪融資\n- 擁有 1 萬名在地活躍用戶\n- 產品核心模組初步驗證成功\n|\n我們要去哪裡\n- 完成 A 輪融資並拓展海外市場\n- 全球活躍用戶數突破百萬\n- 建立完整的開發者生態系' },
-          { layout: 'standard_list', title: '三階段實施計畫', content: '- 第一階段：穩固核心市場，深化產品功能 (Year 1)\n- 第二階段：開發企業版功能，建立商業閉環 (Year 2)\n- 第三階段：啟動多語系支援，全面進軍國際市場 (Year 3)' },
-          { layout: 'title_only', title: '加入我們，共創未來！', content: '（邀請大家加入的口號）' }
-        ]
-      },
-      {
-        id: 'free', name: '✨ 自由版 (空白)',
-        slides: [
-          { layout: 'cover', title: '自由版簡報', content: '（頁數與風格由您定義，版面設計編排由系統依照文義規劃）' }
+          { layout: 'cover', title: '極速說服提案', content: '（副標題 / 演講者）', image: null },
+          { layout: 'title_only', title: '直擊痛點', content: '（請寫出一句震撼人心的痛點問句）\n例如：你還在用人力做無效的重複勞動嗎？', image: null },
+          { layout: 'split_column', title: '解決方案對比', content: '傳統解法\n- 耗時費力\n- 成本高昂\n- 容易出錯\n|\n我們的顛覆性解法\n- 全自動化\n- 節省 80% 成本\n- 零誤差', image: null },
+          { layout: 'title_only', title: '現在就開始改變！', content: '（強烈行動呼籲 Call to Action）\n請點擊 [此連結](https://example.com) 報名', image: null }
         ]
       }
     ];
 
+    // ==========================================
+    // Core Utilities (架構級原生解析器)
+    // ==========================================
+    
+    // 取得實際顏色的 Hex 碼 (輔助 PPTX)
+    const rgbToHex = (rgb) => {
+      const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+      if (!match) return '000000';
+      const hex = (x) => ("0" + parseInt(x).toString(16)).slice(-2);
+      return hex(match[1]) + hex(match[2]) + hex(match[3]);
+    };
+
+    // 將包含 Markdown 的純文字轉換為 PPTX 原生物件
+    const parsePptxText = (rawText, defaultColor, isBold, baseFontSize) => {
+      if (!rawText) return [{ text: ' ', options: { fontSize: baseFontSize } }];
+      const lines = rawText.split('\n');
+      let block = [];
+      
+      lines.forEach((line) => {
+        const isBullet = line.trim().startsWith('- ');
+        const cleanLine = isBullet ? line.trim().substring(2) : line;
+        
+        const regex = /\[(.*?)\]\((.*?)\)/g;
+        let lastIdx = 0;
+        let match;
+        const lineParts = [];
+        
+        // 抓出文字與連結混合陣列
+        while ((match = regex.exec(cleanLine)) !== null) {
+          if (match.index > lastIdx) {
+            lineParts.push({ text: cleanLine.substring(lastIdx, match.index), options: { color: defaultColor, bold: isBold, fontSize: baseFontSize } });
+          }
+          lineParts.push({ text: match[1], options: { hyperlink: { url: match[2] }, color: '2563EB', underline: true, bold: isBold, fontSize: baseFontSize } });
+          lastIdx = regex.lastIndex;
+        }
+        if (lastIdx < cleanLine.length) {
+          lineParts.push({ text: cleanLine.substring(lastIdx), options: { color: defaultColor, bold: isBold, fontSize: baseFontSize } });
+        }
+        
+        if (lineParts.length > 0) {
+          if (isBullet) lineParts[0].options = { ...lineParts[0].options, bullet: true };
+          lineParts[lineParts.length - 1].options = { ...lineParts[lineParts.length - 1].options, breakLine: true };
+          block.push(...lineParts);
+        } else {
+          block.push({ text: ' ', options: { breakLine: true, fontSize: baseFontSize } });
+        }
+      });
+      return block;
+    };
+
     const getCalculatedLayout = (slide, index) => {
       if (slide.layout && slide.layout !== 'auto') return slide.layout;
       if (index === 0) return 'cover';
+      if (slide.image) return 'image_left';
       const safeContent = slide.content || '';
       if (safeContent.includes('|')) return 'split_column';
       const textLen = safeContent.trim().length;
@@ -213,88 +164,47 @@
     const renderGeometricBackground = (theme, palette, layoutType, index) => {
       const isCover = layoutType === 'cover';
       const isEven = index % 2 === 0;
-      
       switch (theme) {
-        case 'minimalist':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <div className={`absolute top-[45%] left-1/2 transform -translate-x-1/2 w-32 h-[1px] ${palette.primary}`}></div> : 
-               <><div className={`absolute top-0 left-0 w-full h-[3px] ${palette.primary} opacity-80`}></div><div className={`absolute bottom-12 ${isEven ? 'right-20' : 'left-20'} w-12 h-[1px] ${palette.accent}`}></div></>}
-            </div>
-          );
-        case 'rounded':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <><div className={`absolute -top-20 -left-20 w-96 h-96 rounded-[80px] ${palette.primary} opacity-10 rotate-12`}></div><div className={`absolute -bottom-10 -right-10 w-64 h-64 rounded-[60px] ${palette.decors[1]} opacity-30 -rotate-6`}></div></> : 
-               <><div className={`absolute top-10 ${isEven ? '-left-10' : '-right-10'} w-40 h-20 rounded-full ${palette.decors[0]} opacity-20`}></div><div className={`absolute bottom-[-20px] ${isEven ? 'right-10' : 'left-10'} w-32 h-32 rounded-[40px] ${palette.accent} opacity-10 rotate-45`}></div></>}
-            </div>
-          );
-        case 'cyber':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <><div className={`absolute top-0 right-0 w-1/2 h-full ${palette.primary} opacity-90`} style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}></div><div className={`absolute bottom-0 left-0 w-1/3 h-1/2 ${palette.accent} opacity-20`} style={{ clipPath: 'polygon(0 100%, 0 0, 100% 100%)' }}></div></> : 
-               <><div className={`absolute top-0 right-0 w-64 h-64 ${palette.decors[0]} opacity-30`} style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}></div><div className={`absolute bottom-10 ${isEven ? 'left-10' : 'right-10'} w-0 h-0 border-l-[30px] border-l-transparent border-b-[30px] border-b-${palette.accent.replace('bg-','')} opacity-80`}></div></>}
-            </div>
-          );
-        case 'dynamic':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <><div className={`absolute top-0 left-1/4 w-32 h-full ${palette.primary} opacity-20 skew-x-[-20deg]`}></div><div className={`absolute top-0 right-1/4 w-64 h-full ${palette.decors[1]} opacity-80 skew-x-[-20deg] mix-blend-multiply`}></div><div className={`absolute bottom-20 left-10 w-48 h-4 ${palette.accent} skew-x-[-20deg]`}></div></> : 
-               <><div className={`absolute top-0 ${isEven ? 'left-10' : 'right-10'} w-12 h-full ${palette.decors[0]} opacity-10 skew-x-[-20deg]`}></div><div className={`absolute bottom-10 ${isEven ? 'right-20' : 'left-20'} w-24 h-6 ${palette.accent} opacity-40 skew-x-[-20deg]`}></div></>}
-            </div>
-          );
-        case 'hexagon':
-          const hexClip = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)';
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <><div className={`absolute -top-32 -right-16 w-96 h-96 ${palette.primary} opacity-20`} style={{ clipPath: hexClip }}></div><div className={`absolute bottom-10 left-10 w-32 h-32 ${palette.accent} opacity-60`} style={{ clipPath: hexClip }}></div><div className={`absolute top-1/2 left-1/3 w-16 h-16 ${palette.decors[1]} opacity-40`} style={{ clipPath: hexClip }}></div></> : 
-               <><div className={`absolute top-[-20px] ${isEven ? '-left-10' : '-right-10'} w-48 h-48 ${palette.decors[0]} opacity-10`} style={{ clipPath: hexClip }}></div><div className={`absolute bottom-12 ${isEven ? 'right-12' : 'left-12'} w-12 h-12 ${palette.accent} opacity-40`} style={{ clipPath: hexClip }}></div></>}
-            </div>
-          );
-        case 'elegant':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <><div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] border-[1px] border-current opacity-10 rotate-45"></div><div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] border-[1px] border-current opacity-5 rotate-45"></div><div className={`absolute top-10 left-1/2 transform -translate-x-1/2 w-4 h-4 ${palette.accent} rotate-45`}></div></> : 
-               <><div className={`absolute top-0 right-0 w-32 h-32 border-b-[1px] border-l-[1px] border-current opacity-10`}></div><div className={`absolute bottom-10 ${isEven ? 'right-10' : 'left-10'} w-8 h-8 border-[2px] border-${palette.accent.replace('bg-','')} rotate-45 opacity-60`}></div></>}
-            </div>
-          );
-        case 'bauhaus':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <><div className={`absolute -top-10 -right-10 w-80 h-80 rounded-full ${palette.primary} opacity-90`}></div><div className={`absolute bottom-20 left-20 w-48 h-48 ${palette.decors[1]} opacity-90 mix-blend-multiply`}></div><div className={`absolute top-1/3 left-1/4 w-16 h-16 ${palette.accent} opacity-90`}></div></> : 
-               <><div className={`absolute top-0 ${isEven ? 'left-0' : 'right-0'} w-6 h-full ${palette.primary} opacity-80`}></div><div className={`absolute bottom-10 ${isEven ? 'right-20' : 'left-20'} w-12 h-12 rounded-full ${palette.accent} opacity-90`}></div></>}
-            </div>
-          );
-        case 'layered':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <><div className={`absolute top-10 right-20 w-96 h-[30rem] ${palette.primary} opacity-[0.08] backdrop-blur-3xl rounded-3xl border border-white/20 shadow-xl`}></div><div className={`absolute -bottom-10 left-10 w-[40rem] h-64 ${palette.decors[1]} opacity-[0.12] backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl`}></div><div className={`absolute top-1/3 left-1/3 w-48 h-48 ${palette.accent} opacity-20 backdrop-blur-md rounded-2xl`}></div></> : 
-               <><div className={`absolute top-20 ${isEven ? '-left-20' : '-right-20'} w-64 h-96 ${palette.primary} opacity-[0.06] backdrop-blur-2xl rounded-3xl border border-white/20`}></div><div className={`absolute bottom-[-10%] ${isEven ? 'right-10' : 'left-10'} w-80 h-32 ${palette.decors[0]} opacity-[0.08] backdrop-blur-xl rounded-2xl`}></div></>}
-            </div>
-          );
-        case 'memphis':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" style={{ backgroundImage: `radial-gradient(${palette.text === 'text-white' ? '#ffffff22' : '#00000011'} 2px, transparent 2px)`, backgroundSize: '40px 40px' }}>
-              {isCover ? <><div className={`absolute top-20 left-20 w-16 h-16 rounded-t-full ${palette.primary} rotate-45 opacity-80`}></div><div className={`absolute bottom-32 right-32 w-20 h-20 border-[6px] border-${palette.decors[1].replace('bg-','')} rounded-full border-dashed opacity-60 animate-spin-slow`}></div><div className={`absolute top-1/4 right-1/4 w-0 h-0 border-l-[25px] border-l-transparent border-b-[40px] border-b-${palette.accent.replace('bg-','')} rotate-[-15deg]`}></div><div className={`absolute bottom-16 left-1/3 text-6xl text-${palette.decors[0].replace('bg-','')} opacity-40 font-bold`}>+</div></> : 
-               <><div className={`absolute top-10 ${isEven ? 'right-20' : 'left-20'} w-10 h-10 rounded-full ${palette.primary} opacity-40`}></div><div className={`absolute bottom-20 ${isEven ? 'left-10' : 'right-10'} w-12 h-12 border-[4px] border-${palette.accent.replace('bg-','')}`}></div><div className={`absolute top-1/2 ${isEven ? 'left-20' : 'right-20'} text-4xl text-${palette.decors[1].replace('bg-','')} opacity-30`}>~</div></>}
-            </div>
-          );
-        case 'spotlight':
-          return (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-              {isCover ? <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120%] h-[120%] ${palette.primary} opacity-10`} style={{ clipPath: 'polygon(30% 100%, 70% 100%, 55% 0, 45% 0)', background: `linear-gradient(to top, var(--tw-gradient-stops))` }}></div> : 
-               <div className={`absolute bottom-0 ${isEven ? 'left-0' : 'right-0'} w-3/4 h-[80%] ${palette.primary} opacity-[0.05]`} style={{ clipPath: isEven ? 'polygon(0 100%, 80% 100%, 20% 0, 0 0)' : 'polygon(20% 100%, 100% 100%, 100% 0, 80% 0)' }}></div>}
-            </div>
-          );
+        case 'minimalist': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <div className={`absolute top-[45%] left-1/2 transform -translate-x-1/2 w-32 h-[1px] ${palette.primary}`}></div> : <><div className={`absolute top-0 left-0 w-full h-[3px] ${palette.primary} opacity-80`}></div><div className={`absolute bottom-12 ${isEven ? 'right-20' : 'left-20'} w-12 h-[1px] ${palette.accent}`}></div></>}</div>;
+        case 'rounded': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <><div className={`absolute -top-20 -left-20 w-96 h-96 rounded-[80px] ${palette.primary} opacity-10 rotate-12`}></div><div className={`absolute -bottom-10 -right-10 w-64 h-64 rounded-[60px] ${palette.decors[1]} opacity-30 -rotate-6`}></div></> : <><div className={`absolute top-10 ${isEven ? '-left-10' : '-right-10'} w-40 h-20 rounded-full ${palette.decors[0]} opacity-20`}></div><div className={`absolute bottom-[-20px] ${isEven ? 'right-10' : 'left-10'} w-32 h-32 rounded-[40px] ${palette.accent} opacity-10 rotate-45`}></div></>}</div>;
+        case 'cyber': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <><div className={`absolute top-0 right-0 w-1/2 h-full ${palette.primary} opacity-90`} style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}></div><div className={`absolute bottom-0 left-0 w-1/3 h-1/2 ${palette.accent} opacity-20`} style={{ clipPath: 'polygon(0 100%, 0 0, 100% 100%)' }}></div></> : <><div className={`absolute top-0 right-0 w-64 h-64 ${palette.decors[0]} opacity-30`} style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}></div><div className={`absolute bottom-10 ${isEven ? 'left-10' : 'right-10'} w-0 h-0 border-l-[30px] border-l-transparent border-b-[30px] border-b-${palette.accent.replace('bg-','')} opacity-80`}></div></>}</div>;
+        case 'dynamic': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <><div className={`absolute top-0 left-1/4 w-32 h-full ${palette.primary} opacity-20 skew-x-[-20deg]`}></div><div className={`absolute top-0 right-1/4 w-64 h-full ${palette.decors[1]} opacity-80 skew-x-[-20deg] mix-blend-multiply`}></div><div className={`absolute bottom-20 left-10 w-48 h-4 ${palette.accent} skew-x-[-20deg]`}></div></> : <><div className={`absolute top-0 ${isEven ? 'left-10' : 'right-10'} w-12 h-full ${palette.decors[0]} opacity-10 skew-x-[-20deg]`}></div><div className={`absolute bottom-10 ${isEven ? 'right-20' : 'left-20'} w-24 h-6 ${palette.accent} opacity-40 skew-x-[-20deg]`}></div></>}</div>;
+        case 'hexagon': const hexClip = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'; return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <><div className={`absolute -top-32 -right-16 w-96 h-96 ${palette.primary} opacity-20`} style={{ clipPath: hexClip }}></div><div className={`absolute bottom-10 left-10 w-32 h-32 ${palette.accent} opacity-60`} style={{ clipPath: hexClip }}></div><div className={`absolute top-1/2 left-1/3 w-16 h-16 ${palette.decors[1]} opacity-40`} style={{ clipPath: hexClip }}></div></> : <><div className={`absolute top-[-20px] ${isEven ? '-left-10' : '-right-10'} w-48 h-48 ${palette.decors[0]} opacity-10`} style={{ clipPath: hexClip }}></div><div className={`absolute bottom-12 ${isEven ? 'right-12' : 'left-12'} w-12 h-12 ${palette.accent} opacity-40`} style={{ clipPath: hexClip }}></div></>}</div>;
+        case 'elegant': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <><div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] border-[1px] border-current opacity-10 rotate-45"></div><div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] border-[1px] border-current opacity-5 rotate-45"></div><div className={`absolute top-10 left-1/2 transform -translate-x-1/2 w-4 h-4 ${palette.accent} rotate-45`}></div></> : <><div className={`absolute top-0 right-0 w-32 h-32 border-b-[1px] border-l-[1px] border-current opacity-10`}></div><div className={`absolute bottom-10 ${isEven ? 'right-10' : 'left-10'} w-8 h-8 border-[2px] border-${palette.accent.replace('bg-','')} rotate-45 opacity-60`}></div></>}</div>;
+        case 'bauhaus': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <><div className={`absolute -top-10 -right-10 w-80 h-80 rounded-full ${palette.primary} opacity-90`}></div><div className={`absolute bottom-20 left-20 w-48 h-48 ${palette.decors[1]} opacity-90 mix-blend-multiply`}></div><div className={`absolute top-1/3 left-1/4 w-16 h-16 ${palette.accent} opacity-90`}></div></> : <><div className={`absolute top-0 ${isEven ? 'left-0' : 'right-0'} w-6 h-full ${palette.primary} opacity-80`}></div><div className={`absolute bottom-10 ${isEven ? 'right-20' : 'left-20'} w-12 h-12 rounded-full ${palette.accent} opacity-90`}></div></>}</div>;
+        case 'layered': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <><div className={`absolute top-10 right-20 w-96 h-[30rem] ${palette.primary} opacity-[0.08] backdrop-blur-3xl rounded-3xl border border-white/20 shadow-xl`}></div><div className={`absolute -bottom-10 left-10 w-[40rem] h-64 ${palette.decors[1]} opacity-[0.12] backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl`}></div><div className={`absolute top-1/3 left-1/3 w-48 h-48 ${palette.accent} opacity-20 backdrop-blur-md rounded-2xl`}></div></> : <><div className={`absolute top-20 ${isEven ? '-left-20' : '-right-20'} w-64 h-96 ${palette.primary} opacity-[0.06] backdrop-blur-2xl rounded-3xl border border-white/20`}></div><div className={`absolute bottom-[-10%] ${isEven ? 'right-10' : 'left-10'} w-80 h-32 ${palette.decors[0]} opacity-[0.08] backdrop-blur-xl rounded-2xl`}></div></>}</div>;
+        case 'memphis': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" style={{ backgroundImage: `radial-gradient(${palette.text === 'text-white' ? '#ffffff22' : '#00000011'} 2px, transparent 2px)`, backgroundSize: '40px 40px' }}>{isCover ? <><div className={`absolute top-20 left-20 w-16 h-16 rounded-t-full ${palette.primary} rotate-45 opacity-80`}></div><div className={`absolute bottom-32 right-32 w-20 h-20 border-[6px] border-${palette.decors[1].replace('bg-','')} rounded-full border-dashed opacity-60 animate-spin-slow`}></div><div className={`absolute top-1/4 right-1/4 w-0 h-0 border-l-[25px] border-l-transparent border-b-[40px] border-b-${palette.accent.replace('bg-','')} rotate-[-15deg]`}></div><div className={`absolute bottom-16 left-1/3 text-6xl text-${palette.decors[0].replace('bg-','')} opacity-40 font-bold`}>+</div></> : <><div className={`absolute top-10 ${isEven ? 'right-20' : 'left-20'} w-10 h-10 rounded-full ${palette.primary} opacity-40`}></div><div className={`absolute bottom-20 ${isEven ? 'left-10' : 'right-10'} w-12 h-12 border-[4px] border-${palette.accent.replace('bg-','')}`}></div><div className={`absolute top-1/2 ${isEven ? 'left-20' : 'right-20'} text-4xl text-${palette.decors[1].replace('bg-','')} opacity-30`}>~</div></>}</div>;
+        case 'spotlight': return <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">{isCover ? <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120%] h-[120%] ${palette.primary} opacity-10`} style={{ clipPath: 'polygon(30% 100%, 70% 100%, 55% 0, 45% 0)', background: `linear-gradient(to top, var(--tw-gradient-stops))` }}></div> : <div className={`absolute bottom-0 ${isEven ? 'left-0' : 'right-0'} w-3/4 h-[80%] ${palette.primary} opacity-[0.05]`} style={{ clipPath: isEven ? 'polygon(0 100%, 80% 100%, 20% 0, 0 0)' : 'polygon(20% 100%, 100% 100%, 100% 0, 80% 0)' }}></div>}</div>;
         default: return null;
       }
     };
 
+    // 將 Markdown 超連結轉為 React 元素顯示
     const formatContentText = (text) => {
       if (!text) return null;
+      
+      const renderLinks = (str) => {
+        const regex = /\[(.*?)\]\((.*?)\)/g;
+        const parts = [];
+        let lastIndex = 0;
+        let match;
+        let keyCount = 0;
+        while ((match = regex.exec(str)) !== null) {
+          if (match.index > lastIndex) {
+            parts.push(<span key={keyCount++}>{str.substring(lastIndex, match.index)}</span>);
+          }
+          parts.push(<a key={keyCount++} href={match[2]} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline decoration-blue-300 hover:text-blue-700 pointer-events-auto" onClick={e => e.stopPropagation()}>{match[1]}</a>);
+          lastIndex = regex.lastIndex;
+        }
+        if (lastIndex < str.length) {
+          parts.push(<span key={keyCount++}>{str.substring(lastIndex)}</span>);
+        }
+        return parts;
+      };
+
       return text.split('\n').map((line, i) => {
-        if (line.trim().startsWith('- ')) return <li key={i} className="ml-6 list-disc mb-3">{line.trim().substring(2)}</li>;
-        return <p key={i} className="mb-4">{line}</p>;
+        if (line.trim().startsWith('- ')) return <li key={i} className="ml-6 list-disc mb-3">{renderLinks(line.trim().substring(2))}</li>;
+        return <p key={i} className="mb-4">{renderLinks(line)}</p>;
       });
     };
 
@@ -327,57 +237,93 @@
         <div className={`relative w-full h-full flex flex-col ${selectedPalette.bg} ${selectedPalette.text} overflow-hidden transition-all duration-500`} style={{ aspectRatio: '16/9' }}>
           {renderGeometricBackground(selectedTheme, selectedPalette, layoutType, index)}
           <div className="relative z-10 w-full h-full p-12 flex">
+            
             {layoutType === 'cover' && (
               <div className="flex flex-col justify-center items-center text-center w-full">
                 <div className={`max-w-4xl p-10 z-10 ${getCoverTitleClass(selectedTheme)}`}>
-                   <h1 className={`text-4xl md:text-6xl font-bold mb-6 tracking-tight ${selectedTheme === 'memphis' ? 'uppercase' : ''}`}>{slide.title}</h1>
-                   <div className="text-xl md:text-2xl font-light opacity-90 leading-relaxed">{formatContentText(slide.content)}</div>
+                   <h1 className={`ppt-text-layer text-4xl md:text-6xl font-bold mb-6 tracking-tight ${selectedTheme === 'memphis' ? 'uppercase' : ''}`} data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h1>
+                   <div className="ppt-text-layer text-xl md:text-2xl font-light opacity-90 leading-relaxed" data-ppt-val={slide.content} data-ppt-align="center">{formatContentText(slide.content)}</div>
                    {selectedTheme === 'minimalist' && <div className={`w-32 h-[1px] mt-10 mx-auto ${selectedPalette.accent}`}></div>}
                    {selectedTheme === 'cyber' && <div className={`w-24 h-2 mt-10 ${selectedPalette.accent}`}></div>}
                    {selectedTheme === 'bauhaus' && <div className={`w-16 h-16 rounded-full mt-10 mx-auto ${selectedPalette.accent}`}></div>}
                 </div>
               </div>
             )}
+            
             {layoutType === 'title_only' && (
               <div className="flex flex-col justify-center items-center text-center w-full h-full z-10">
                 {selectedTheme === 'elegant' && <div className={`w-4 h-4 mb-6 rotate-45 border border-current opacity-50`}></div>}
-                <h2 className={`text-4xl md:text-6xl font-bold mb-8 max-w-5xl leading-tight ${selectedTheme === 'dynamic' ? 'skew-x-[-5deg]' : ''}`}>{slide.title}</h2>
-                {slide.content && <div className="text-xl md:text-3xl opacity-80 max-w-4xl font-light leading-relaxed">{formatContentText(slide.content)}</div>}
+                <h2 className="ppt-text-layer text-4xl md:text-6xl font-bold mb-8 max-w-5xl leading-tight" data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h2>
+                {slide.content && <div className="ppt-text-layer text-xl md:text-3xl opacity-80 max-w-4xl font-light leading-relaxed" data-ppt-val={slide.content} data-ppt-align="center">{formatContentText(slide.content)}</div>}
               </div>
             )}
+
             {layoutType === 'split_column' && (() => {
               const splitData = parseSplitColumn(slide.content);
               return (
                 <div className="flex flex-col w-full h-full z-10">
                   <div className="mb-8 w-full text-center">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-3">{slide.title}</h2>
+                    <h2 className="ppt-text-layer text-3xl md:text-4xl font-bold mb-3" data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h2>
                     {selectedTheme !== 'minimalist' && <div className={`h-1 w-24 mx-auto ${selectedPalette.accent}`}></div>}
                   </div>
                   <div className="flex-1 grid grid-cols-2 gap-6 w-full max-w-5xl mx-auto">
                     <div className={`flex flex-col ${selectedTheme === 'rounded' ? 'rounded-2xl' : 'rounded-lg'} p-6 shadow-inner border border-current/10 bg-current/5 backdrop-blur-sm`}>
-                      <h3 className="text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current opacity-80">{splitData.left.colTitle}</h3>
-                      <ul className="text-lg md:text-xl leading-relaxed text-left flex-1">{formatContentText(splitData.left.colContent)}</ul>
+                      <h3 className="ppt-text-layer text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current opacity-80" data-ppt-val={splitData.left.colTitle}>{splitData.left.colTitle}</h3>
+                      <ul className="ppt-text-layer text-lg md:text-xl leading-relaxed text-left flex-1" data-ppt-val={splitData.left.colContent}>{formatContentText(splitData.left.colContent)}</ul>
                     </div>
                     <div className={`flex flex-col ${selectedTheme === 'rounded' ? 'rounded-2xl' : 'rounded-lg'} p-6 shadow-md border border-current/10 bg-current/10 backdrop-blur-sm`}>
-                      <h3 className="text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current">{splitData.right.colTitle}</h3>
-                      <ul className="text-lg md:text-xl leading-relaxed text-left flex-1 font-medium">{formatContentText(splitData.right.colContent)}</ul>
+                      <h3 className="ppt-text-layer text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current" data-ppt-val={splitData.right.colTitle}>{splitData.right.colTitle}</h3>
+                      <ul className="ppt-text-layer text-lg md:text-xl leading-relaxed text-left flex-1 font-medium" data-ppt-val={splitData.right.colContent}>{formatContentText(splitData.right.colContent)}</ul>
                     </div>
                   </div>
                 </div>
               );
             })()}
+
             {layoutType === 'standard_list' && (
               <div className={`flex flex-col h-full w-full z-10 ${isEven ? 'items-start' : (['rounded','elegant'].includes(selectedTheme) ? 'items-center text-center' : 'items-start')} ${['cyber','bauhaus'].includes(selectedTheme) ? 'ml-10' : ''}`}>
                 <div className="mb-8 w-full">
-                  <h2 className={`text-3xl md:text-4xl font-bold mb-3 flex items-center ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'justify-start' : 'justify-center'}`}>
+                  <h2 className={`ppt-text-layer text-3xl md:text-4xl font-bold mb-3 flex items-center ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'justify-start' : 'justify-center'}`} data-ppt-val={slide.title} data-ppt-align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'}>
                     {selectedTheme === 'hexagon' && <span className={`inline-block w-3 h-5 mr-3 ${selectedPalette.primary}`} style={{clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'}}></span>}
                     {selectedTheme === 'bauhaus' && <span className={`inline-block w-5 h-5 mr-3 bg-current`}></span>}
                     {slide.title}
                   </h2>
                   {selectedTheme !== 'minimalist' && <div className={`h-1 w-24 ${selectedPalette.accent} ${isEven || !['rounded','elegant'].includes(selectedTheme) ? '' : 'mx-auto'}`}></div>}
                 </div>
-                <div className={`text-xl md:text-2xl leading-relaxed flex-1 w-full max-w-4xl ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'text-left' : 'text-center'}`}>
+                <div className={`ppt-text-layer text-xl md:text-2xl leading-relaxed flex-1 w-full max-w-4xl ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'text-left' : 'text-center'}`} data-ppt-val={slide.content} data-ppt-align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'}>
                   <ul className="inline-block text-left">{formatContentText(slide.content)}</ul>
+                </div>
+              </div>
+            )}
+
+            {/* 新增: 左圖右文 Layout */}
+            {layoutType === 'image_left' && (
+              <div className="flex w-full h-full z-10 gap-10 items-center">
+                <div className="flex-1 h-full rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 bg-slate-200 flex items-center justify-center">
+                   {slide.image ? 
+                     <img src={slide.image} className="ppt-image-layer w-full h-full object-cover" crossOrigin="anonymous" /> : 
+                     <span className="text-slate-400 font-bold tracking-widest opacity-50">Image Layer</span>
+                   }
+                </div>
+                <div className="flex-1 flex flex-col justify-center text-left">
+                   <h2 className="ppt-text-layer text-4xl md:text-5xl font-bold mb-6" data-ppt-val={slide.title} data-ppt-align="left">{slide.title}</h2>
+                   <div className="ppt-text-layer text-xl md:text-2xl leading-relaxed" data-ppt-val={slide.content} data-ppt-align="left">{formatContentText(slide.content)}</div>
+                </div>
+              </div>
+            )}
+
+            {/* 新增: 右圖左文 Layout */}
+            {layoutType === 'image_right' && (
+              <div className="flex w-full h-full z-10 gap-10 items-center">
+                <div className="flex-1 flex flex-col justify-center text-left">
+                   <h2 className="ppt-text-layer text-4xl md:text-5xl font-bold mb-6" data-ppt-val={slide.title} data-ppt-align="left">{slide.title}</h2>
+                   <div className="ppt-text-layer text-xl md:text-2xl leading-relaxed" data-ppt-val={slide.content} data-ppt-align="left">{formatContentText(slide.content)}</div>
+                </div>
+                <div className="flex-1 h-full rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 bg-slate-200 flex items-center justify-center">
+                   {slide.image ? 
+                     <img src={slide.image} className="ppt-image-layer w-full h-full object-cover" crossOrigin="anonymous" /> : 
+                     <span className="text-slate-400 font-bold tracking-widest opacity-50">Image Layer</span>
+                   }
                 </div>
               </div>
             )}
@@ -394,15 +340,13 @@
       const [selectedPalette, setSelectedPalette] = useState(PALETTES[0]);
       
       const [isFullscreen, setIsFullscreen] = useState(false);
-      const [isSidebarOpen, setIsSidebarOpen] = useState(true); // 新增控制左側欄狀態
+      const [isSidebarOpen, setIsSidebarOpen] = useState(true);
       
       const [showImportModal, setShowImportModal] = useState(false);
       const [importText, setImportText] = useState('');
       const [selectedScenarioId, setSelectedScenarioId] = useState('');
-      const [isPrinting, setIsPrinting] = useState(false);
-      const [isExportingGoogle, setIsExportingGoogle] = useState(false);
+      const [isExporting, setIsExporting] = useState(false);
 
-      // 安全取得目前投影片
       const activeSlide = slides[activeSlideIndex] || slides[0];
 
       useEffect(() => {
@@ -416,18 +360,117 @@
         return () => window.removeEventListener('keydown', handleKeyDown);
       }, [isFullscreen, slides.length]);
 
-      useEffect(() => {
-        if (isPrinting) {
-          const timer = setTimeout(() => window.print(), 500);
-          return () => clearTimeout(timer);
-        }
-      }, [isPrinting]);
+      // =========================================================================
+      // 💎 Version B: 完美架構版原生匯出 (PptxGenJS + html2canvas 混合渲染引擎)
+      // =========================================================================
+      const handleNativeExport = async (mode = 'download', token = null) => {
+        if (!window.PptxGenJS || !window.html2canvas) { alert('處理套件仍在載入中，請稍候片刻再試！'); return; }
+        setIsExporting(true);
 
-      useEffect(() => {
-        const handleAfterPrint = () => setIsPrinting(false);
-        window.addEventListener('afterprint', handleAfterPrint);
-        return () => window.removeEventListener('afterprint', handleAfterPrint);
-      }, []);
+        setTimeout(async () => {
+          try {
+            const pres = new window.PptxGenJS();
+            pres.layout = 'LAYOUT_16x9';
+
+            for (let i = 0; i < slides.length; i++) {
+              const slideDiv = document.getElementById(`export-slide-${i}`);
+              if (!slideDiv) continue;
+
+              // Step 1: 暫時隱藏原生支援的「文字」與「圖片」，保留美麗的 CSS 幾何背景
+              const textLayers = slideDiv.querySelectorAll('.ppt-text-layer');
+              const imageLayers = slideDiv.querySelectorAll('.ppt-image-layer');
+              textLayers.forEach(el => el.style.opacity = '0');
+              imageLayers.forEach(el => el.style.opacity = '0');
+
+              // Step 2: 擷取背景
+              const canvas = await window.html2canvas(slideDiv, { scale: 2, useCORS: true, logging: false });
+              const bkgdData = canvas.toDataURL('image/jpeg', 0.8);
+              
+              // Step 3: 恢復顯示
+              textLayers.forEach(el => el.style.opacity = '1');
+              imageLayers.forEach(el => el.style.opacity = '1');
+
+              // Step 4: 創建投影片，並將擷圖設為不可編輯之背景
+              const pptSlide = pres.addSlide();
+              pptSlide.background = { data: bkgdData };
+
+              // 準備計算座標：1280px = 10 inches (標準 PPTX 16:9 寬度)
+              const slideRect = slideDiv.getBoundingClientRect();
+              const pxToInches = (px) => px / 128;
+
+              // Step 5: 疊加「原生可替換圖片」
+              imageLayers.forEach(imgEl => {
+                 const rect = imgEl.getBoundingClientRect();
+                 const x = pxToInches(rect.left - slideRect.left);
+                 const y = pxToInches(rect.top - slideRect.top);
+                 const w = pxToInches(rect.width);
+                 const h = pxToInches(rect.height);
+                 pptSlide.addImage({ data: imgEl.src, x, y, w, h, sizing: { type: 'cover', w, h } });
+              });
+
+              // Step 6: 疊加「原生可編輯、可點擊文字與連結」
+              textLayers.forEach(textEl => {
+                 const rect = textEl.getBoundingClientRect();
+                 const x = pxToInches(rect.left - slideRect.left);
+                 const y = pxToInches(rect.top - slideRect.top);
+                 const w = pxToInches(rect.width);
+                 const h = pxToInches(rect.height);
+
+                 const computedStyle = window.getComputedStyle(textEl);
+                 const fontSizePx = parseFloat(computedStyle.fontSize) || 24;
+                 const fontSizePt = fontSizePx * 0.75; // px 轉 pt
+                 const isBold = computedStyle.fontWeight >= 600 || computedStyle.fontWeight === 'bold';
+                 const fontColor = rgbToHex(computedStyle.color);
+                 const align = textEl.getAttribute('data-ppt-align') || 'left';
+                 const rawText = textEl.getAttribute('data-ppt-val') || '';
+
+                 // 解析出超連結與項目符號
+                 const textObjects = parsePptxText(rawText, fontColor, isBold, fontSizePt);
+                 
+                 if (textObjects.length > 0) {
+                    pptSlide.addText(textObjects, {
+                        x, y, w, h,
+                        align: align,
+                        valign: 'top',
+                        margin: 0,
+                        wrap: true
+                    });
+                 }
+              });
+            }
+
+            // Step 7: 依照模式匯出
+            const filename = `簡報魔法師_產出_${new Date().toLocaleDateString()}.pptx`;
+            if (mode === 'download') {
+               await pres.writeFile({ fileName: filename });
+            } else if (mode === 'google' && token) {
+               const fileBlob = await pres.write({ outputType: 'blob' });
+               const base64Data = await new Promise((resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                  reader.onerror = reject;
+                  reader.readAsDataURL(fileBlob);
+                });
+                const boundary = '-------314159265358979323846';
+                const delimiter = "\r\n--" + boundary + "\r\n";
+                const close_delim = "\r\n--" + boundary + "--";
+                const metadata = { name: filename, mimeType: 'application/vnd.google-apps.presentation' };
+                const multipartRequestBody = delimiter + 'Content-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + delimiter + 'Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation\r\n' + 'Content-Transfer-Encoding: base64\r\n\r\n' + base64Data + close_delim;
+                
+                const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                  method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'multipart/related; boundary=' + boundary }, body: multipartRequestBody,
+                });
+                
+                if (response.ok) alert('✅ 成功匯出！請至您的 Google 雲端硬碟查看最新的原生 Google 簡報。');
+                else { const err = await response.json(); alert('❌ 傳送失敗: ' + (err.error?.message || '未知錯誤')); }
+            }
+          } catch (err) { 
+            console.error(err); alert('處理過程中發生錯誤：' + err.message); 
+          } finally { 
+            setIsExporting(false); 
+          }
+        }, 800);
+      };
 
       const loginAndExportToGoogle = () => {
         const GOOGLE_CLIENT_ID = '572028686072-5s3oqikq4tha4jrcp06kl1716li2gubl.apps.googleusercontent.com'; 
@@ -436,51 +479,13 @@
           client_id: GOOGLE_CLIENT_ID,
           scope: 'https://www.googleapis.com/auth/drive.file', 
           callback: (tokenResponse) => {
-            if (tokenResponse && tokenResponse.access_token) { generateAndUpload(tokenResponse.access_token); }
+            if (tokenResponse && tokenResponse.access_token) { handleNativeExport('google', tokenResponse.access_token); }
           },
         });
         client.requestAccessToken();
       };
 
-      const generateAndUpload = async (token) => {
-        if (!window.PptxGenJS || !window.html2canvas) { alert('處理套件仍在載入中，請稍候片刻再試！'); return; }
-        setIsExportingGoogle(true);
-        setTimeout(async () => {
-          try {
-            const pres = new window.PptxGenJS();
-            pres.layout = 'LAYOUT_16x9';
-            for (let i = 0; i < slides.length; i++) {
-              const el = document.getElementById(`export-slide-${i}`);
-              if (el) {
-                const canvas = await window.html2canvas(el, { scale: 2, useCORS: true, logging: false });
-                const imgData = canvas.toDataURL('image/png');
-                const slide = pres.addSlide();
-                slide.addImage({ data: imgData, x: 0, y: 0, w: '100%', h: '100%' });
-              }
-            }
-            const fileBlob = await pres.write({ outputType: 'blob' });
-            const base64Data = await new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result.split(',')[1]);
-              reader.onerror = reject;
-              reader.readAsDataURL(fileBlob);
-            });
-            const boundary = '-------314159265358979323846';
-            const delimiter = "\r\n--" + boundary + "\r\n";
-            const close_delim = "\r\n--" + boundary + "--";
-            const metadata = { name: `簡報魔法師_匯出_${new Date().toLocaleDateString()}`, mimeType: 'application/vnd.google-apps.presentation' };
-            const multipartRequestBody = delimiter + 'Content-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) + delimiter + 'Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation\r\n' + 'Content-Transfer-Encoding: base64\r\n\r\n' + base64Data + close_delim;
-            const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-              method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'multipart/related; boundary=' + boundary }, body: multipartRequestBody,
-            });
-            if (response.ok) alert('✅ 成功匯出！請至您的 Google 雲端硬碟查看最新的 Google 簡報。');
-            else { const err = await response.json(); alert('❌ 傳送至 Google 失敗: ' + (err.error?.message || '未知錯誤')); }
-          } catch (err) { console.error(err); alert('處理過程中發生錯誤：' + err.message); } 
-          finally { setIsExportingGoogle(false); }
-        }, 1000);
-      };
-
-      const addSlide = () => { setSlides([...slides, { id: Date.now().toString(), layout: 'auto', title: '新標題', content: '' }]); setActiveSlideIndex(slides.length); };
+      const addSlide = () => { setSlides([...slides, { id: Date.now().toString(), layout: 'auto', title: '新標題', content: '', image: null }]); setActiveSlideIndex(slides.length); };
       const updateSlide = (id, field, value) => { setSlides(slides.map(s => s.id === id ? { ...s, [field]: value } : s)); };
       
       const removeSlide = (id, indexToRemove) => { 
@@ -511,7 +516,8 @@
           return {
             id: Date.now().toString() + '-' + index, layout: 'auto',
             title: lines.length > 0 ? lines[0].trim() : `第 ${index + 1} 頁`,
-            content: lines.length > 1 ? lines.slice(1).join('\n').trim() : ''
+            content: lines.length > 1 ? lines.slice(1).join('\n').trim() : '',
+            image: null
           };
         }).filter(s => s.title || s.content);
 
@@ -526,26 +532,13 @@
         const link = document.createElement('a'); link.href = url; link.download = '簡報大綱_導出.txt'; link.click(); URL.revokeObjectURL(url);
       };
 
-      if (isPrinting) {
-        return (
-          <div className="bg-white">
-            <style dangerouslySetInnerHTML={{__html: `@page { size: 16in 9in; margin: 0; } @media print { body { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`}} />
-            {slides.map((slide, index) => (
-              <div key={slide.id} className="w-[16in] h-[9in] overflow-hidden relative" style={{ pageBreakAfter: 'always' }}>
-                <SlideView slide={slide} index={index} selectedTheme={selectedTheme} selectedPalette={selectedPalette} />
-              </div>
-            ))}
-          </div>
-        );
-      }
-
       return (
         <div className="h-screen bg-slate-100 flex flex-col font-sans relative overflow-hidden">
           
-          {/* 背景隱藏匯出區域 */}
+          {/* 背景隱藏原生匯出基準區域 (嚴格設定為 1280x720 以確保座標換算精準) */}
           <div className="fixed top-[-9999px] left-[-9999px] z-[-1] pointer-events-none">
-            {isExportingGoogle && slides.map((slide, index) => (
-              <div key={`export-${slide.id}`} id={`export-slide-${index}`} className="w-[1280px] h-[720px] relative bg-white">
+            {isExporting && slides.map((slide, index) => (
+              <div key={`export-${slide.id}`} id={`export-slide-${index}`} className="w-[1280px] h-[720px] relative bg-white overflow-hidden">
                 <SlideView slide={slide} index={index} selectedTheme={selectedTheme} selectedPalette={selectedPalette} />
               </div>
             ))}
@@ -572,12 +565,13 @@
               
               <div className="w-px h-6 bg-slate-200 mx-1"></div>
               
-              <button onClick={() => setIsPrinting(true)} className="flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors text-sm font-medium shadow-sm ml-2">
-                <Download className="w-4 h-4" /> PDF
+              <button onClick={() => handleNativeExport('download')} disabled={isExporting} className="flex items-center gap-2 px-4 py-1.5 bg-white border border-blue-200 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors text-sm font-bold shadow-sm ml-2 disabled:opacity-50">
+                {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                下載 PPTX
               </button>
-              <button onClick={loginAndExportToGoogle} disabled={isExportingGoogle} className="flex items-center gap-2 px-4 py-1.5 bg-yellow-500 text-yellow-950 rounded-lg hover:bg-yellow-400 transition-colors text-sm font-bold shadow-sm disabled:opacity-50">
-                {isExportingGoogle ? <Loader2 className="w-4 h-4 animate-spin" /> : <CloudUpload className="w-4 h-4" />}
-                {isExportingGoogle ? '上傳中...' : 'Google 簡報'}
+              <button onClick={loginAndExportToGoogle} disabled={isExporting} className="flex items-center gap-2 px-4 py-1.5 bg-yellow-500 text-yellow-950 rounded-lg hover:bg-yellow-400 transition-colors text-sm font-bold shadow-sm disabled:opacity-50">
+                {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CloudUpload className="w-4 h-4" />}
+                Google 簡報
               </button>
               <button onClick={() => setIsFullscreen(true)} className="flex items-center gap-2 px-5 py-1.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-medium shadow-md">
                 <Play className="w-4 h-4 fill-current" /> 播放
@@ -602,7 +596,7 @@
           ) : (
             <div className="flex-1 flex overflow-hidden relative">
               
-              {/* 可收合左側欄 (僅含版面與情境設定) */}
+              {/* 可收合左側欄 */}
               <div className={`${isSidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 ease-in-out bg-white border-r border-slate-200 flex flex-col z-20 shrink-0 overflow-hidden`}>
                 <div className="p-6 w-80 overflow-y-auto custom-scrollbar h-full">
                   <div className="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -645,7 +639,7 @@
                 {/* 預覽與編輯區 */}
                 <div className="flex-1 p-4 md:p-6 flex flex-col items-center justify-start overflow-y-auto custom-scrollbar relative">
                    
-                   {/* 頂端換頁導覽 (當隱藏底部列時輔助用) */}
+                   {/* 頂端換頁導覽 */}
                    <div className="w-full max-w-5xl flex justify-between items-center mb-3">
                      <span className="text-sm font-bold text-slate-400 bg-white px-3 py-1 rounded-full shadow-sm">頁面 {activeSlideIndex + 1} / {slides.length}</span>
                      <div className="flex gap-2">
@@ -661,10 +655,10 @@
                    </div>
                    
                    {/* 沉浸式關聯編輯器 (Contextual Inline Editor) */}
-                   <div className="w-full max-w-5xl mt-6 bg-white rounded-2xl shadow-md border border-slate-200 p-5 shrink-0 flex flex-col gap-4 relative z-10 transition-all duration-300">
+                   <div className="w-full max-w-5xl mt-6 bg-white rounded-2xl shadow-md border border-slate-200 p-5 shrink-0 flex flex-col relative z-10 transition-all duration-300">
                       <div className="absolute -top-3 left-6 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm flex items-center gap-1"><Type className="w-3 h-3"/> 直接編輯此頁內容</div>
                       
-                      <div className="flex gap-4 items-center pt-2">
+                      <div className="flex gap-4 items-center pt-2 mb-4">
                         <select 
                           value={activeSlide.layout || 'auto'} 
                           onChange={(e) => updateSlide(activeSlide.id, 'layout', e.target.value)} 
@@ -675,6 +669,8 @@
                           <option value="title_only">大標題/金句</option>
                           <option value="split_column">雙欄對比 (以 | 分隔)</option>
                           <option value="standard_list">標準條列</option>
+                          <option value="image_left">🖼️ 左圖右文</option>
+                          <option value="image_right">🖼️ 右圖左文</option>
                         </select>
                         <input 
                           type="text" 
@@ -689,8 +685,33 @@
                         value={activeSlide.content} 
                         onChange={(e) => updateSlide(activeSlide.id, 'content', e.target.value)} 
                         placeholder="輸入內文...\n👉 輸入 '- ' 開頭產生條列項目\n👉 輸入 '|' 即可自動分割雙欄" 
-                        className="w-full h-28 text-[15px] text-slate-700 bg-slate-50 border border-slate-200 rounded-xl p-4 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-y font-mono custom-scrollbar placeholder-slate-400 leading-relaxed" 
+                        className="w-full h-24 text-[15px] text-slate-700 bg-slate-50 border border-slate-200 rounded-xl p-4 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-y font-mono custom-scrollbar placeholder-slate-400 leading-relaxed" 
                       />
+
+                      {/* 圖片上傳按鈕 & 超連結提示 */}
+                      <div className="flex justify-between items-center text-xs text-slate-500 bg-slate-50 border border-slate-100 rounded-lg p-2.5 mt-3">
+                        <div className="flex items-center gap-4">
+                          <label className="flex items-center gap-1.5 cursor-pointer hover:text-blue-600 transition-colors bg-white px-3 py-1.5 rounded-md shadow-sm border border-slate-200">
+                             <ImageIcon className="w-4 h-4" />
+                             <span className="font-bold">{activeSlide.image ? '更換圖片' : '上傳圖片'}</span>
+                             <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                               const file = e.target.files[0];
+                               if(file) {
+                                  const reader = new FileReader();
+                                  reader.onload = (e) => updateSlide(activeSlide.id, 'image', e.target.result);
+                                  reader.readAsDataURL(file);
+                               }
+                             }} />
+                          </label>
+                          {activeSlide.image && (
+                             <button onClick={() => updateSlide(activeSlide.id, 'image', null)} className="text-red-500 hover:text-red-700 underline underline-offset-2">移除圖片</button>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-slate-400">
+                          <LinkIcon className="w-4 h-4" /> 超連結支援：<code className="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-blue-600 font-mono">[文字](https://網址)</code>
+                        </div>
+                      </div>
+
                    </div>
 
                 </div>
