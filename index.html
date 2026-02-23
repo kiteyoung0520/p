@@ -33,7 +33,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
 
     // --- SVG 圖示元件庫 ---
     const SvgIcon = ({ d, className }) => (
@@ -55,8 +55,6 @@
     const Download = (p) => <SvgIcon className={p.className} d='<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>'/>;
     const CloudUpload = (p) => <SvgIcon className={p.className} d='<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line>'/>;
     const Loader2 = (p) => <SvgIcon className={p.className} d='<path d="M21 12a9 9 0 1 1-6.219-8.56"></path>'/>;
-    const ImageIcon = (p) => <SvgIcon className={p.className} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>'/>;
-    const LinkIcon = (p) => <SvgIcon className={p.className} d='<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>'/>;
     const PanelLeftClose = (p) => <SvgIcon className={p.className} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><polyline points="14 15 11 12 14 9"></polyline>'/>;
     const PanelLeftOpen = (p) => <SvgIcon className={p.className} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><polyline points="11 9 14 12 11 15"></polyline>'/>;
 
@@ -92,10 +90,10 @@
       {
         id: 'elevator', name: '🚀 極速電梯 (說服)',
         slides: [
-          { layout: 'cover', title: '極速說服提案', content: '（副標題 / 演講者）', image: null },
-          { layout: 'title_only', title: '直擊痛點', content: '（請寫出一句震撼人心的痛點問句）\n例如：你還在用人力做無效的重複勞動嗎？', image: null },
-          { layout: 'split_column', title: '解決方案對比', content: '傳統解法\n- 耗時費力\n- 成本高昂\n- 容易出錯\n|\n我們的顛覆性解法\n- 全自動化\n- 節省 80% 成本\n- 零誤差', image: null },
-          { layout: 'title_only', title: '現在就開始改變！', content: '（強烈行動呼籲 Call to Action）\n請點擊 [此連結](https://example.com) 報名', image: null }
+          { layout: 'cover', title: '極速說服提案', content: '（副標題 / 演講者）' },
+          { layout: 'title_only', title: '直擊痛點', content: '（請寫出一句震撼人心的痛點問句）\n例如：你還在用人力做無效的重複勞動嗎？' },
+          { layout: 'split_column', title: '解決方案對比', content: '傳統解法\n- 耗時費力\n- 成本高昂\n- 容易出錯\n|\n我們的顛覆性解法\n- 全自動化\n- 節省 80% 成本\n- 零誤差' },
+          { layout: 'title_only', title: '現在就開始改變！', content: '（強烈行動呼籲 Call to Action）\n請立刻聯繫我們！' }
         ]
       }
     ];
@@ -112,7 +110,7 @@
       return hex(match[1]) + hex(match[2]) + hex(match[3]);
     };
 
-    // 將包含 Markdown 的純文字轉換為 PPTX 原生物件
+    // 將包含純文字轉換為 PPTX 原生物件 (移除了超連結邏輯，專注於條列解析)
     const parsePptxText = (rawText, defaultColor, isBold, baseFontSize) => {
       if (!rawText) return [{ text: ' ', options: { fontSize: baseFontSize } }];
       const lines = rawText.split('\n');
@@ -122,30 +120,16 @@
         const isBullet = line.trim().startsWith('- ');
         const cleanLine = isBullet ? line.trim().substring(2) : line;
         
-        const regex = /\[(.*?)\]\((.*?)\)/g;
-        let lastIdx = 0;
-        let match;
-        const lineParts = [];
-        
-        // 抓出文字與連結混合陣列
-        while ((match = regex.exec(cleanLine)) !== null) {
-          if (match.index > lastIdx) {
-            lineParts.push({ text: cleanLine.substring(lastIdx, match.index), options: { color: defaultColor, bold: isBold, fontSize: baseFontSize } });
-          }
-          lineParts.push({ text: match[1], options: { hyperlink: { url: match[2] }, color: '2563EB', underline: true, bold: isBold, fontSize: baseFontSize } });
-          lastIdx = regex.lastIndex;
-        }
-        if (lastIdx < cleanLine.length) {
-          lineParts.push({ text: cleanLine.substring(lastIdx), options: { color: defaultColor, bold: isBold, fontSize: baseFontSize } });
-        }
-        
-        if (lineParts.length > 0) {
-          if (isBullet) lineParts[0].options = { ...lineParts[0].options, bullet: true };
-          lineParts[lineParts.length - 1].options = { ...lineParts[lineParts.length - 1].options, breakLine: true };
-          block.push(...lineParts);
-        } else {
-          block.push({ text: ' ', options: { breakLine: true, fontSize: baseFontSize } });
-        }
+        block.push({
+            text: cleanLine || ' ',
+            options: {
+                color: defaultColor,
+                bold: isBold,
+                fontSize: baseFontSize,
+                bullet: isBullet ? true : false,
+                breakLine: true
+            }
+        });
       });
       return block;
     };
@@ -153,7 +137,6 @@
     const getCalculatedLayout = (slide, index) => {
       if (slide.layout && slide.layout !== 'auto') return slide.layout;
       if (index === 0) return 'cover';
-      if (slide.image) return 'image_left';
       const safeContent = slide.content || '';
       if (safeContent.includes('|')) return 'split_column';
       const textLen = safeContent.trim().length;
@@ -179,32 +162,12 @@
       }
     };
 
-    // 將 Markdown 超連結轉為 React 元素顯示
+    // 將純文字轉為 React 元素顯示
     const formatContentText = (text) => {
       if (!text) return null;
-      
-      const renderLinks = (str) => {
-        const regex = /\[(.*?)\]\((.*?)\)/g;
-        const parts = [];
-        let lastIndex = 0;
-        let match;
-        let keyCount = 0;
-        while ((match = regex.exec(str)) !== null) {
-          if (match.index > lastIndex) {
-            parts.push(<span key={keyCount++}>{str.substring(lastIndex, match.index)}</span>);
-          }
-          parts.push(<a key={keyCount++} href={match[2]} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline decoration-blue-300 hover:text-blue-700 pointer-events-auto" onClick={e => e.stopPropagation()}>{match[1]}</a>);
-          lastIndex = regex.lastIndex;
-        }
-        if (lastIndex < str.length) {
-          parts.push(<span key={keyCount++}>{str.substring(lastIndex)}</span>);
-        }
-        return parts;
-      };
-
       return text.split('\n').map((line, i) => {
-        if (line.trim().startsWith('- ')) return <li key={i} className="ml-6 list-disc mb-3">{renderLinks(line.trim().substring(2))}</li>;
-        return <p key={i} className="mb-4">{renderLinks(line)}</p>;
+        if (line.trim().startsWith('- ')) return <li key={i} className="ml-6 list-disc mb-3 leading-relaxed break-words">{line.trim().substring(2)}</li>;
+        return <p key={i} className="mb-4 leading-relaxed break-words whitespace-pre-wrap">{line}</p>;
       });
     };
 
@@ -218,10 +181,63 @@
       return { left: parseSide(parts[0]), right: parseSide(parts[1]) };
     };
 
-    const SlideView = ({ slide, index, selectedTheme, selectedPalette }) => {
+    // --- 💎 隱形輸入框替換法元件 (Click-to-Edit) ---
+    const EditableWrapper = ({ isEditable, editingField, setEditingField, field, value, placeholder, children, className, align="left", onUpdate }) => {
+        const textareaRef = useRef(null);
+
+        const adjustHeight = () => {
+            if (textareaRef.current) {
+                textareaRef.current.style.height = 'auto';
+                textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+            }
+        };
+
+        useEffect(() => {
+            if (isEditable && editingField === field) {
+                adjustHeight();
+                // 聚焦時將游標移至最後
+                textareaRef.current.selectionStart = textareaRef.current.value.length;
+                textareaRef.current.selectionEnd = textareaRef.current.value.length;
+            }
+        }, [editingField, field, isEditable]);
+
+        if (!isEditable) return children;
+
+        if (editingField === field) {
+            return (
+                <textarea
+                    ref={textareaRef}
+                    autoFocus
+                    value={value}
+                    onChange={(e) => { onUpdate(field, e.target.value); adjustHeight(); }}
+                    onBlur={() => setEditingField(null)}
+                    placeholder={placeholder}
+                    className={`${className} bg-white/90 text-slate-900 backdrop-blur-md border border-blue-400/50 rounded-xl outline-none resize-none overflow-hidden block w-full focus:ring-4 focus:ring-blue-400/30 p-4 -m-4 shadow-2xl z-[100]`}
+                    rows={1}
+                    style={{ minHeight: '3em', textAlign: align === 'center' ? 'center' : 'left' }}
+                />
+            );
+        }
+
+        return (
+            <div
+                onClick={(e) => { e.stopPropagation(); setEditingField(field); }}
+                className="cursor-text hover:outline hover:outline-2 hover:outline-blue-400/50 hover:bg-black/5 rounded-xl transition-all relative group z-40 w-full"
+                title="點擊編輯內容"
+            >
+                <div className="absolute -top-3 -right-2 bg-blue-600 text-white text-[11px] font-bold px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-sm z-50 flex items-center gap-1">
+                   <Type className="w-3 h-3" /> 編輯
+                </div>
+                {value ? children : <div className={`${className} opacity-30 px-4 py-2`}>{placeholder}</div>}
+            </div>
+        );
+    };
+
+    const SlideView = ({ slide, index, selectedTheme, selectedPalette, isEditable, onUpdate }) => {
       const layoutType = getCalculatedLayout(slide, index);
       const isEven = index % 2 === 0;
       const isCover = layoutType === 'cover';
+      const [editingField, setEditingField] = useState(null);
 
       const getCoverTitleClass = (theme) => {
         switch (theme) {
@@ -234,99 +250,118 @@
       };
 
       return (
-        <div className={`relative w-full h-full flex flex-col ${selectedPalette.bg} ${selectedPalette.text} overflow-hidden transition-all duration-500`} style={{ aspectRatio: '16/9' }}>
+        <div className={`relative w-full h-full flex flex-col ${selectedPalette.bg} ${selectedPalette.text} overflow-hidden transition-all duration-500 group`} style={{ aspectRatio: '16/9' }}>
           {renderGeometricBackground(selectedTheme, selectedPalette, layoutType, index)}
+          
+          {/* 懸浮版面切換器 (僅在編輯模式下出現) */}
+          {isEditable && (
+            <div className="absolute top-4 left-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm border border-slate-200 shadow-lg rounded-lg p-2 flex items-center gap-2" onClick={e => e.stopPropagation()}>
+              <Layout className="w-4 h-4 text-blue-600" />
+              <select
+                value={slide.layout || 'auto'}
+                onChange={(e) => onUpdate('layout', e.target.value)}
+                className="text-sm font-bold bg-transparent text-slate-700 outline-none cursor-pointer"
+              >
+                <option value="auto">✨ AI 自動排版</option>
+                <option value="cover">封面首頁</option>
+                <option value="title_only">大標題/金句</option>
+                <option value="split_column">雙欄對比 (以 | 分隔)</option>
+                <option value="standard_list">標準條列</option>
+              </select>
+            </div>
+          )}
+
           <div className="relative z-10 w-full h-full p-12 flex">
             
             {layoutType === 'cover' && (
               <div className="flex flex-col justify-center items-center text-center w-full">
-                <div className={`max-w-4xl p-10 z-10 ${getCoverTitleClass(selectedTheme)}`}>
-                   <h1 className={`ppt-text-layer text-4xl md:text-6xl font-bold mb-6 tracking-tight ${selectedTheme === 'memphis' ? 'uppercase' : ''}`} data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h1>
-                   <div className="ppt-text-layer text-xl md:text-2xl font-light opacity-90 leading-relaxed" data-ppt-val={slide.content} data-ppt-align="center">{formatContentText(slide.content)}</div>
-                   {selectedTheme === 'minimalist' && <div className={`w-32 h-[1px] mt-10 mx-auto ${selectedPalette.accent}`}></div>}
-                   {selectedTheme === 'cyber' && <div className={`w-24 h-2 mt-10 ${selectedPalette.accent}`}></div>}
-                   {selectedTheme === 'bauhaus' && <div className={`w-16 h-16 rounded-full mt-10 mx-auto ${selectedPalette.accent}`}></div>}
+                <div className={`max-w-4xl p-10 z-10 flex flex-col items-center gap-6 w-full ${getCoverTitleClass(selectedTheme)}`}>
+                   
+                   <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="title" value={slide.title} placeholder="輸入封面標題..." align="center" onUpdate={onUpdate} className={`text-4xl md:text-6xl font-bold tracking-tight break-keep leading-tight ${selectedTheme === 'memphis' ? 'uppercase' : ''}`}>
+                       <h1 className={`ppt-text-layer text-4xl md:text-6xl font-bold tracking-tight break-keep leading-tight ${selectedTheme === 'memphis' ? 'uppercase' : ''}`} data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h1>
+                   </EditableWrapper>
+                   
+                   <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="content" value={slide.content} placeholder="輸入副標題或演講者..." align="center" onUpdate={onUpdate} className="text-xl md:text-2xl font-light opacity-90 leading-relaxed break-words whitespace-pre-wrap">
+                       <div className="ppt-text-layer text-xl md:text-2xl font-light opacity-90 leading-relaxed break-words whitespace-pre-wrap" data-ppt-val={slide.content} data-ppt-align="center">{formatContentText(slide.content)}</div>
+                   </EditableWrapper>
+
+                   {selectedTheme === 'minimalist' && <div className={`w-32 h-[1px] mt-4 mx-auto ${selectedPalette.accent}`}></div>}
+                   {selectedTheme === 'cyber' && <div className={`w-24 h-2 mt-4 ${selectedPalette.accent}`}></div>}
+                   {selectedTheme === 'bauhaus' && <div className={`w-16 h-16 rounded-full mt-4 mx-auto ${selectedPalette.accent}`}></div>}
                 </div>
               </div>
             )}
             
             {layoutType === 'title_only' && (
-              <div className="flex flex-col justify-center items-center text-center w-full h-full z-10">
-                {selectedTheme === 'elegant' && <div className={`w-4 h-4 mb-6 rotate-45 border border-current opacity-50`}></div>}
-                <h2 className="ppt-text-layer text-4xl md:text-6xl font-bold mb-8 max-w-5xl leading-tight" data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h2>
-                {slide.content && <div className="ppt-text-layer text-xl md:text-3xl opacity-80 max-w-4xl font-light leading-relaxed" data-ppt-val={slide.content} data-ppt-align="center">{formatContentText(slide.content)}</div>}
+              <div className="flex flex-col justify-center items-center text-center w-full h-full z-10 gap-8">
+                {selectedTheme === 'elegant' && <div className={`w-4 h-4 rotate-45 border border-current opacity-50 shrink-0`}></div>}
+                
+                <div className="shrink-0 w-full">
+                    <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="title" value={slide.title} placeholder="輸入金句大標題..." align="center" onUpdate={onUpdate} className="text-4xl md:text-6xl font-bold max-w-5xl mx-auto leading-tight break-keep">
+                        <h2 className="ppt-text-layer text-4xl md:text-6xl font-bold max-w-5xl mx-auto leading-tight break-keep" data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h2>
+                    </EditableWrapper>
+                </div>
+                
+                {slide.content && (
+                    <div className="shrink-0 w-full">
+                        <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="content" value={slide.content} placeholder="輸入補充文字..." align="center" onUpdate={onUpdate} className="text-xl md:text-3xl opacity-80 max-w-4xl mx-auto font-light leading-relaxed break-words whitespace-pre-wrap">
+                            <div className="ppt-text-layer text-xl md:text-3xl opacity-80 max-w-4xl mx-auto font-light leading-relaxed break-words whitespace-pre-wrap" data-ppt-val={slide.content} data-ppt-align="center">{formatContentText(slide.content)}</div>
+                        </EditableWrapper>
+                    </div>
+                )}
               </div>
             )}
 
             {layoutType === 'split_column' && (() => {
               const splitData = parseSplitColumn(slide.content);
               return (
-                <div className="flex flex-col w-full h-full z-10">
-                  <div className="mb-8 w-full text-center">
-                    <h2 className="ppt-text-layer text-3xl md:text-4xl font-bold mb-3" data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h2>
-                    {selectedTheme !== 'minimalist' && <div className={`h-1 w-24 mx-auto ${selectedPalette.accent}`}></div>}
+                <div className="flex flex-col w-full h-full z-10 gap-8">
+                  <div className="w-full text-center shrink-0">
+                    <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="title" value={slide.title} placeholder="輸入標題..." align="center" onUpdate={onUpdate} className="text-3xl md:text-4xl font-bold leading-tight break-keep">
+                        <h2 className="ppt-text-layer text-3xl md:text-4xl font-bold leading-tight break-keep" data-ppt-val={slide.title} data-ppt-align="center">{slide.title}</h2>
+                    </EditableWrapper>
+                    {selectedTheme !== 'minimalist' && <div className={`h-1 w-24 mx-auto mt-4 ${selectedPalette.accent}`}></div>}
                   </div>
-                  <div className="flex-1 grid grid-cols-2 gap-6 w-full max-w-5xl mx-auto">
-                    <div className={`flex flex-col ${selectedTheme === 'rounded' ? 'rounded-2xl' : 'rounded-lg'} p-6 shadow-inner border border-current/10 bg-current/5 backdrop-blur-sm`}>
-                      <h3 className="ppt-text-layer text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current opacity-80" data-ppt-val={splitData.left.colTitle}>{splitData.left.colTitle}</h3>
-                      <ul className="ppt-text-layer text-lg md:text-xl leading-relaxed text-left flex-1" data-ppt-val={splitData.left.colContent}>{formatContentText(splitData.left.colContent)}</ul>
-                    </div>
-                    <div className={`flex flex-col ${selectedTheme === 'rounded' ? 'rounded-2xl' : 'rounded-lg'} p-6 shadow-md border border-current/10 bg-current/10 backdrop-blur-sm`}>
-                      <h3 className="ppt-text-layer text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current" data-ppt-val={splitData.right.colTitle}>{splitData.right.colTitle}</h3>
-                      <ul className="ppt-text-layer text-lg md:text-xl leading-relaxed text-left flex-1 font-medium" data-ppt-val={splitData.right.colContent}>{formatContentText(splitData.right.colContent)}</ul>
-                    </div>
-                  </div>
+                  
+                  <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="content" value={slide.content} placeholder="輸入雙欄內容 (以 | 符號分隔左右欄位)..." align="left" onUpdate={onUpdate} className="text-lg w-full font-mono">
+                      <div className="flex-1 grid grid-cols-2 gap-6 w-full max-w-5xl mx-auto items-start">
+                        <div className={`flex flex-col ${selectedTheme === 'rounded' ? 'rounded-2xl' : 'rounded-lg'} p-6 shadow-inner border border-current/10 bg-current/5 backdrop-blur-sm h-full`}>
+                          <h3 className="ppt-text-layer text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current opacity-80 break-keep leading-tight" data-ppt-val={splitData.left.colTitle}>{splitData.left.colTitle}</h3>
+                          <ul className="ppt-text-layer text-lg md:text-xl leading-relaxed text-left flex-1 break-words" data-ppt-val={splitData.left.colContent}>{formatContentText(splitData.left.colContent)}</ul>
+                        </div>
+                        <div className={`flex flex-col ${selectedTheme === 'rounded' ? 'rounded-2xl' : 'rounded-lg'} p-6 shadow-md border border-current/10 bg-current/10 backdrop-blur-sm h-full`}>
+                          <h3 className="ppt-text-layer text-xl md:text-2xl font-bold mb-4 pb-3 border-b-2 border-current break-keep leading-tight" data-ppt-val={splitData.right.colTitle}>{splitData.right.colTitle}</h3>
+                          <ul className="ppt-text-layer text-lg md:text-xl leading-relaxed text-left flex-1 font-medium break-words" data-ppt-val={splitData.right.colContent}>{formatContentText(splitData.right.colContent)}</ul>
+                        </div>
+                      </div>
+                  </EditableWrapper>
                 </div>
               );
             })()}
 
             {layoutType === 'standard_list' && (
-              <div className={`flex flex-col h-full w-full z-10 ${isEven ? 'items-start' : (['rounded','elegant'].includes(selectedTheme) ? 'items-center text-center' : 'items-start')} ${['cyber','bauhaus'].includes(selectedTheme) ? 'ml-10' : ''}`}>
-                <div className="mb-8 w-full">
-                  <h2 className={`ppt-text-layer text-3xl md:text-4xl font-bold mb-3 flex items-center ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'justify-start' : 'justify-center'}`} data-ppt-val={slide.title} data-ppt-align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'}>
-                    {selectedTheme === 'hexagon' && <span className={`inline-block w-3 h-5 mr-3 ${selectedPalette.primary}`} style={{clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'}}></span>}
-                    {selectedTheme === 'bauhaus' && <span className={`inline-block w-5 h-5 mr-3 bg-current`}></span>}
-                    {slide.title}
-                  </h2>
-                  {selectedTheme !== 'minimalist' && <div className={`h-1 w-24 ${selectedPalette.accent} ${isEven || !['rounded','elegant'].includes(selectedTheme) ? '' : 'mx-auto'}`}></div>}
+              <div className={`flex flex-col h-full w-full z-10 gap-8 ${isEven ? 'items-start' : (['rounded','elegant'].includes(selectedTheme) ? 'items-center text-center' : 'items-start')} ${['cyber','bauhaus'].includes(selectedTheme) ? 'ml-10' : ''}`}>
+                <div className="w-full shrink-0">
+                  <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="title" value={slide.title} placeholder="輸入標題..." align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'} onUpdate={onUpdate} className={`text-3xl md:text-4xl font-bold flex items-center ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'justify-start' : 'justify-center'} leading-tight break-keep`}>
+                      <h2 className={`ppt-text-layer text-3xl md:text-4xl font-bold flex items-center ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'justify-start' : 'justify-center'} leading-tight break-keep`} data-ppt-val={slide.title} data-ppt-align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'}>
+                        {selectedTheme === 'hexagon' && <span className={`inline-block w-3 h-5 mr-3 ${selectedPalette.primary}`} style={{clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'}}></span>}
+                        {selectedTheme === 'bauhaus' && <span className={`inline-block w-5 h-5 mr-3 bg-current`}></span>}
+                        {slide.title}
+                      </h2>
+                  </EditableWrapper>
+                  {selectedTheme !== 'minimalist' && <div className={`h-1 w-24 mt-4 ${selectedPalette.accent} ${isEven || !['rounded','elegant'].includes(selectedTheme) ? '' : 'mx-auto'}`}></div>}
                 </div>
-                <div className={`ppt-text-layer text-xl md:text-2xl leading-relaxed flex-1 w-full max-w-4xl ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'text-left' : 'text-center'}`} data-ppt-val={slide.content} data-ppt-align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'}>
-                  <ul className="inline-block text-left">{formatContentText(slide.content)}</ul>
-                </div>
-              </div>
-            )}
-
-            {/* 新增: 左圖右文 Layout */}
-            {layoutType === 'image_left' && (
-              <div className="flex w-full h-full z-10 gap-10 items-center">
-                <div className="flex-1 h-full rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 bg-slate-200 flex items-center justify-center">
-                   {slide.image ? 
-                     <img src={slide.image} className="ppt-image-layer w-full h-full object-cover" crossOrigin="anonymous" /> : 
-                     <span className="text-slate-400 font-bold tracking-widest opacity-50">Image Layer</span>
-                   }
-                </div>
-                <div className="flex-1 flex flex-col justify-center text-left">
-                   <h2 className="ppt-text-layer text-4xl md:text-5xl font-bold mb-6" data-ppt-val={slide.title} data-ppt-align="left">{slide.title}</h2>
-                   <div className="ppt-text-layer text-xl md:text-2xl leading-relaxed" data-ppt-val={slide.content} data-ppt-align="left">{formatContentText(slide.content)}</div>
+                
+                <div className="flex-1 w-full max-w-4xl">
+                   <EditableWrapper isEditable={isEditable} editingField={editingField} setEditingField={setEditingField} field="content" value={slide.content} placeholder="輸入條列內容 (- 開頭)..." align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'} onUpdate={onUpdate} className={`text-xl md:text-2xl leading-relaxed whitespace-pre-wrap break-words w-full`}>
+                       <div className={`ppt-text-layer text-xl md:text-2xl leading-relaxed w-full whitespace-pre-wrap break-words ${isEven || !['rounded','elegant'].includes(selectedTheme) ? 'text-left' : 'text-center'}`} data-ppt-val={slide.content} data-ppt-align={isEven || !['rounded','elegant'].includes(selectedTheme) ? 'left' : 'center'}>
+                         <ul className="inline-block text-left">{formatContentText(slide.content)}</ul>
+                       </div>
+                   </EditableWrapper>
                 </div>
               </div>
             )}
-
-            {/* 新增: 右圖左文 Layout */}
-            {layoutType === 'image_right' && (
-              <div className="flex w-full h-full z-10 gap-10 items-center">
-                <div className="flex-1 flex flex-col justify-center text-left">
-                   <h2 className="ppt-text-layer text-4xl md:text-5xl font-bold mb-6" data-ppt-val={slide.title} data-ppt-align="left">{slide.title}</h2>
-                   <div className="ppt-text-layer text-xl md:text-2xl leading-relaxed" data-ppt-val={slide.content} data-ppt-align="left">{formatContentText(slide.content)}</div>
-                </div>
-                <div className="flex-1 h-full rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 bg-slate-200 flex items-center justify-center">
-                   {slide.image ? 
-                     <img src={slide.image} className="ppt-image-layer w-full h-full object-cover" crossOrigin="anonymous" /> : 
-                     <span className="text-slate-400 font-bold tracking-widest opacity-50">Image Layer</span>
-                   }
-                </div>
-              </div>
-            )}
+            
           </div>
           {!isCover && <div className="absolute bottom-5 right-6 text-base font-bold opacity-30 z-10">{index + 1}</div>}
         </div>
@@ -376,11 +411,9 @@
               const slideDiv = document.getElementById(`export-slide-${i}`);
               if (!slideDiv) continue;
 
-              // Step 1: 暫時隱藏原生支援的「文字」與「圖片」，保留美麗的 CSS 幾何背景
+              // Step 1: 暫時隱藏原生支援的「文字」，保留美麗的 CSS 幾何背景
               const textLayers = slideDiv.querySelectorAll('.ppt-text-layer');
-              const imageLayers = slideDiv.querySelectorAll('.ppt-image-layer');
               textLayers.forEach(el => el.style.opacity = '0');
-              imageLayers.forEach(el => el.style.opacity = '0');
 
               // Step 2: 擷取背景
               const canvas = await window.html2canvas(slideDiv, { scale: 2, useCORS: true, logging: false });
@@ -388,7 +421,6 @@
               
               // Step 3: 恢復顯示
               textLayers.forEach(el => el.style.opacity = '1');
-              imageLayers.forEach(el => el.style.opacity = '1');
 
               // Step 4: 創建投影片，並將擷圖設為不可編輯之背景
               const pptSlide = pres.addSlide();
@@ -398,17 +430,7 @@
               const slideRect = slideDiv.getBoundingClientRect();
               const pxToInches = (px) => px / 128;
 
-              // Step 5: 疊加「原生可替換圖片」
-              imageLayers.forEach(imgEl => {
-                 const rect = imgEl.getBoundingClientRect();
-                 const x = pxToInches(rect.left - slideRect.left);
-                 const y = pxToInches(rect.top - slideRect.top);
-                 const w = pxToInches(rect.width);
-                 const h = pxToInches(rect.height);
-                 pptSlide.addImage({ data: imgEl.src, x, y, w, h, sizing: { type: 'cover', w, h } });
-              });
-
-              // Step 6: 疊加「原生可編輯、可點擊文字與連結」
+              // Step 5: 疊加「原生可編輯文字」
               textLayers.forEach(textEl => {
                  const rect = textEl.getBoundingClientRect();
                  const x = pxToInches(rect.left - slideRect.left);
@@ -424,7 +446,7 @@
                  const align = textEl.getAttribute('data-ppt-align') || 'left';
                  const rawText = textEl.getAttribute('data-ppt-val') || '';
 
-                 // 解析出超連結與項目符號
+                 // 解析出項目符號
                  const textObjects = parsePptxText(rawText, fontColor, isBold, fontSizePt);
                  
                  if (textObjects.length > 0) {
@@ -439,7 +461,7 @@
               });
             }
 
-            // Step 7: 依照模式匯出
+            // Step 6: 依照模式匯出
             const filename = `簡報魔法師_產出_${new Date().toLocaleDateString()}.pptx`;
             if (mode === 'download') {
                await pres.writeFile({ fileName: filename });
@@ -485,7 +507,7 @@
         client.requestAccessToken();
       };
 
-      const addSlide = () => { setSlides([...slides, { id: Date.now().toString(), layout: 'auto', title: '新標題', content: '', image: null }]); setActiveSlideIndex(slides.length); };
+      const addSlide = () => { setSlides([...slides, { id: Date.now().toString(), layout: 'auto', title: '新標題', content: '' }]); setActiveSlideIndex(slides.length); };
       const updateSlide = (id, field, value) => { setSlides(slides.map(s => s.id === id ? { ...s, [field]: value } : s)); };
       
       const removeSlide = (id, indexToRemove) => { 
@@ -516,8 +538,7 @@
           return {
             id: Date.now().toString() + '-' + index, layout: 'auto',
             title: lines.length > 0 ? lines[0].trim() : `第 ${index + 1} 頁`,
-            content: lines.length > 1 ? lines.slice(1).join('\n').trim() : '',
-            image: null
+            content: lines.length > 1 ? lines.slice(1).join('\n').trim() : ''
           };
         }).filter(s => s.title || s.content);
 
@@ -633,14 +654,14 @@
                 </div>
               </div>
 
-              {/* 中間與右側主工作區：包含大圖預覽、編輯器、以及底部縮圖列 */}
+              {/* 中間與右側主工作區：包含大圖預覽、以及底部縮圖列 */}
               <div className="flex-1 flex flex-col bg-slate-100 min-w-0">
                 
-                {/* 預覽與編輯區 */}
-                <div className="flex-1 p-4 md:p-6 flex flex-col items-center justify-start overflow-y-auto custom-scrollbar relative">
+                {/* 預覽與畫布編輯區 */}
+                <div className="flex-1 p-4 md:p-8 flex flex-col items-center justify-start overflow-y-auto custom-scrollbar relative">
                    
                    {/* 頂端換頁導覽 */}
-                   <div className="w-full max-w-5xl flex justify-between items-center mb-3">
+                   <div className="w-full max-w-5xl flex justify-between items-center mb-4">
                      <span className="text-sm font-bold text-slate-400 bg-white px-3 py-1 rounded-full shadow-sm">頁面 {activeSlideIndex + 1} / {slides.length}</span>
                      <div className="flex gap-2">
                        <button onClick={() => setActiveSlideIndex(Math.max(0, activeSlideIndex - 1))} disabled={activeSlideIndex === 0} className="p-1.5 bg-white rounded shadow-sm text-slate-500 hover:text-blue-600 disabled:opacity-30 transition-colors"><ChevronLeft className="w-4 h-4" /></button>
@@ -648,70 +669,16 @@
                      </div>
                    </div>
 
-                   {/* 大尺寸預覽圖 */}
-                   <div className="w-full max-w-5xl aspect-video rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.1)] ring-1 ring-slate-200/50 relative group bg-white shrink-0 transition-all duration-300">
-                      <SlideView slide={activeSlide} index={activeSlideIndex} selectedTheme={selectedTheme} selectedPalette={selectedPalette} />
-                      <button onClick={() => setIsFullscreen(true)} className="absolute bottom-4 right-4 bg-slate-900/60 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-900 backdrop-blur-md"><Maximize2 className="w-5 h-5" /></button>
-                   </div>
-                   
-                   {/* 沉浸式關聯編輯器 (Contextual Inline Editor) */}
-                   <div className="w-full max-w-5xl mt-6 bg-white rounded-2xl shadow-md border border-slate-200 p-5 shrink-0 flex flex-col relative z-10 transition-all duration-300">
-                      <div className="absolute -top-3 left-6 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm flex items-center gap-1"><Type className="w-3 h-3"/> 直接編輯此頁內容</div>
-                      
-                      <div className="flex gap-4 items-center pt-2 mb-4">
-                        <select 
-                          value={activeSlide.layout || 'auto'} 
-                          onChange={(e) => updateSlide(activeSlide.id, 'layout', e.target.value)} 
-                          className="text-sm font-medium border border-slate-300 bg-slate-50 text-slate-700 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shrink-0"
-                        >
-                          <option value="auto">✨ AI 自動排版</option>
-                          <option value="cover">封面首頁</option>
-                          <option value="title_only">大標題/金句</option>
-                          <option value="split_column">雙欄對比 (以 | 分隔)</option>
-                          <option value="standard_list">標準條列</option>
-                          <option value="image_left">🖼️ 左圖右文</option>
-                          <option value="image_right">🖼️ 右圖左文</option>
-                        </select>
-                        <input 
-                          type="text" 
-                          value={activeSlide.title} 
-                          onChange={(e) => updateSlide(activeSlide.id, 'title', e.target.value)} 
-                          placeholder="輸入投影片大標題..." 
-                          className="flex-1 text-2xl font-bold bg-transparent border-b-2 border-transparent hover:border-slate-200 focus:border-blue-500 outline-none transition-colors px-1 py-1 text-slate-800 placeholder-slate-300" 
-                        />
-                      </div>
-                      
-                      <textarea 
-                        value={activeSlide.content} 
-                        onChange={(e) => updateSlide(activeSlide.id, 'content', e.target.value)} 
-                        placeholder="輸入內文...\n👉 輸入 '- ' 開頭產生條列項目\n👉 輸入 '|' 即可自動分割雙欄" 
-                        className="w-full h-24 text-[15px] text-slate-700 bg-slate-50 border border-slate-200 rounded-xl p-4 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-y font-mono custom-scrollbar placeholder-slate-400 leading-relaxed" 
+                   {/* 大尺寸畫布 (啟用直接點擊編輯模式) */}
+                   <div className="w-full max-w-5xl aspect-video rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.15)] ring-1 ring-slate-200/50 relative bg-white shrink-0 transition-all duration-300">
+                      <SlideView 
+                         slide={activeSlide} 
+                         index={activeSlideIndex} 
+                         selectedTheme={selectedTheme} 
+                         selectedPalette={selectedPalette} 
+                         isEditable={true}
+                         onUpdate={(field, val) => updateSlide(activeSlide.id, field, val)}
                       />
-
-                      {/* 圖片上傳按鈕 & 超連結提示 */}
-                      <div className="flex justify-between items-center text-xs text-slate-500 bg-slate-50 border border-slate-100 rounded-lg p-2.5 mt-3">
-                        <div className="flex items-center gap-4">
-                          <label className="flex items-center gap-1.5 cursor-pointer hover:text-blue-600 transition-colors bg-white px-3 py-1.5 rounded-md shadow-sm border border-slate-200">
-                             <ImageIcon className="w-4 h-4" />
-                             <span className="font-bold">{activeSlide.image ? '更換圖片' : '上傳圖片'}</span>
-                             <input type="file" accept="image/*" className="hidden" onChange={(e) => {
-                               const file = e.target.files[0];
-                               if(file) {
-                                  const reader = new FileReader();
-                                  reader.onload = (e) => updateSlide(activeSlide.id, 'image', e.target.result);
-                                  reader.readAsDataURL(file);
-                               }
-                             }} />
-                          </label>
-                          {activeSlide.image && (
-                             <button onClick={() => updateSlide(activeSlide.id, 'image', null)} className="text-red-500 hover:text-red-700 underline underline-offset-2">移除圖片</button>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-slate-400">
-                          <LinkIcon className="w-4 h-4" /> 超連結支援：<code className="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-blue-600 font-mono">[文字](https://網址)</code>
-                        </div>
-                      </div>
-
                    </div>
 
                 </div>
