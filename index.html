@@ -60,6 +60,7 @@
     // --- 新增排版圖示 ---
     const Move = (p) => <SvgIcon className={p.className} d='<polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="19 9 22 12 19 15"></polyline><polyline points="9 19 12 22 15 19"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line>'/>;
     const RotateCcw = (p) => <SvgIcon className={p.className} d='<polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>'/>;
+    const GripHorizontal = (p) => <SvgIcon className={p.className} d='<circle cx="12" cy="9" r="1"></circle><circle cx="19" cy="9" r="1"></circle><circle cx="5" cy="9" r="1"></circle><circle cx="12" cy="15" r="1"></circle><circle cx="19" cy="15" r="1"></circle><circle cx="5" cy="15" r="1"></circle>'/>;
 
     // --- 設定檔 (Themes & Palettes) ---
     const PALETTES = [
@@ -598,6 +599,8 @@
       const [importText, setImportText] = useState('');
       const [selectedScenarioId, setSelectedScenarioId] = useState('');
       const [isExporting, setIsExporting] = useState(false);
+      const [thumbnailStripHeight, setThumbnailStripHeight] = useState(160); // 預設高度
+      const isDraggingStrip = useRef(false);
 
       const activeSlide = slides[activeSlideIndex] || slides[0];
 
@@ -611,6 +614,38 @@
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
       }, [isFullscreen, slides.length]);
+
+      // --- 拖拉縮放縮圖列表高度的邏輯 ---
+      const handleStripMouseDown = (e) => {
+        isDraggingStrip.current = true;
+        document.body.style.cursor = 'row-resize';
+      };
+
+      useEffect(() => {
+        const handleMouseMove = (e) => {
+          if (!isDraggingStrip.current) return;
+          // 計算新的高度：視窗總高度 - 滑鼠目前的 Y 座標
+          const newHeight = window.innerHeight - e.clientY;
+          // 限制最小與最大高度
+          const clampedHeight = Math.max(80, Math.min(newHeight, window.innerHeight * 0.8));
+          setThumbnailStripHeight(clampedHeight);
+        };
+
+        const handleMouseUp = () => {
+          if (isDraggingStrip.current) {
+            isDraggingStrip.current = false;
+            document.body.style.cursor = 'default';
+          }
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+        
+        return () => {
+          window.removeEventListener('mousemove', handleMouseMove);
+          window.removeEventListener('mouseup', handleMouseUp);
+        };
+      }, []);
 
       // =========================================================================
       // 💎 Version B: 完美架構版原生匯出 (完美支援拖曳位移與字體縮放)
@@ -893,7 +928,7 @@
                 <div className="flex-1 p-4 md:p-8 flex flex-col items-center justify-start overflow-y-auto custom-scrollbar relative">
                    
                    {/* 頂端換頁導覽 */}
-                   <div className="w-full max-w-5xl flex justify-between items-center mb-4">
+                   <div className="w-full max-w-5xl flex justify-between items-center mb-4 shrink-0">
                      <span className="text-sm font-bold text-slate-400 bg-white px-3 py-1 rounded-full shadow-sm">頁面 {activeSlideIndex + 1} / {slides.length}</span>
                      <div className="flex gap-2">
                        <button onClick={() => setActiveSlideIndex(Math.max(0, activeSlideIndex - 1))} disabled={activeSlideIndex === 0} className="p-1.5 bg-white rounded shadow-sm text-slate-500 hover:text-blue-600 disabled:opacity-30 transition-colors"><ChevronLeft className="w-4 h-4" /></button>
@@ -916,50 +951,74 @@
                 </div>
                 
                 {/* 底部投影片管理列 (Thumbnail Strip) */}
-                <div className="h-40 bg-white border-t border-slate-200 shrink-0 flex flex-col shadow-[0_-4px_10px_rgba(0,0,0,0.02)] z-20">
-                   <div className="px-4 py-2 flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50">
+                <div 
+                  className="bg-white border-t border-slate-200 shrink-0 flex flex-col shadow-[0_-4px_10px_rgba(0,0,0,0.02)] z-20 relative"
+                  style={{ height: `${thumbnailStripHeight}px` }}
+                >
+                   {/* 拖拉縮放的把手 */}
+                   <div 
+                      className="absolute top-0 left-0 w-full h-2 cursor-row-resize flex justify-center items-center hover:bg-slate-100 transition-colors -translate-y-1/2 z-30"
+                      onMouseDown={handleStripMouseDown}
+                      title="拖曳以調整高度"
+                   >
+                      <GripHorizontal className="w-4 h-4 text-slate-400" />
+                   </div>
+
+                   <div className="px-4 py-2 flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 shrink-0">
                      <span>所有頁面 ({slides.length})</span>
                      <span>點擊預覽或拖曳</span>
                    </div>
-                   <div className="flex-1 overflow-x-auto flex items-center gap-4 px-4 custom-scrollbar pb-2">
-                      {slides.map((slide, idx) => (
-                        <div 
-                          key={slide.id} 
-                          onClick={() => setActiveSlideIndex(idx)} 
-                          className={`relative h-24 aspect-video rounded-lg cursor-pointer shrink-0 group transition-all duration-200 ${activeSlideIndex === idx ? 'ring-2 ring-blue-500 ring-offset-2 scale-105 shadow-md z-10' : 'ring-1 ring-slate-200 hover:ring-slate-300 hover:scale-[1.02] opacity-70 hover:opacity-100'}`}
-                        >
-                          {/* 縮圖預覽 */}
-                          <div className={`w-full h-full rounded-lg overflow-hidden ${selectedPalette.bg} relative`}>
-                            <div className="absolute inset-0 scale-[0.2] origin-top-left w-[500%] h-[500%] pointer-events-none">
-                               <SlideView slide={slide} index={idx} selectedTheme={selectedTheme} selectedPalette={selectedPalette} isEditable={false} />
-                            </div>
-                          </div>
-                          
-                          {/* 頁碼標籤 */}
-                          <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-[10px] font-bold px-2 py-0.5 rounded-full ${activeSlideIndex === idx ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600 shadow-sm'}`}>
-                            {idx + 1}
-                          </div>
-
-                          {/* 刪除按鈕 (Hover 顯示) */}
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); removeSlide(slide.id, idx); }} 
-                            className="absolute -top-2 -right-2 bg-red-100 text-red-600 p-1.5 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                            title="刪除頁面"
-                            disabled={slides.length === 1}
+                   
+                   {/* 縮圖列表內容區塊 */}
+                   <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
+                     <div 
+                        className="grid gap-4" 
+                        style={{
+                           // 動態計算 grid columns，根據高度決定縮圖大小，最小寬度為 120px
+                           gridTemplateColumns: `repeat(auto-fill, minmax(${Math.max(120, thumbnailStripHeight * 1.2)}px, 1fr))`
+                        }}
+                     >
+                        {slides.map((slide, idx) => (
+                          <div 
+                            key={slide.id} 
+                            onClick={() => setActiveSlideIndex(idx)} 
+                            className={`relative aspect-video rounded-lg cursor-pointer group transition-all duration-200 ${activeSlideIndex === idx ? 'ring-2 ring-blue-500 ring-offset-2 scale-105 shadow-md z-10' : 'ring-1 ring-slate-200 hover:ring-slate-300 hover:scale-[1.02] opacity-70 hover:opacity-100'}`}
                           >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ))}
+                            {/* 縮圖預覽 */}
+                            <div className={`w-full h-full rounded-lg overflow-hidden ${selectedPalette.bg} relative`}>
+                              {/* 這裡使用一個固定比例的容器來裝載 SlideView，並透過 CSS transform 縮放 */}
+                              <div className="absolute top-0 left-0 w-[1280px] h-[720px] origin-top-left pointer-events-none"
+                                   style={{ transform: `scale(calc(100% / 1280))` }}>
+                                 <SlideView slide={slide} index={idx} selectedTheme={selectedTheme} selectedPalette={selectedPalette} isEditable={false} />
+                              </div>
+                            </div>
+                            
+                            {/* 頁碼標籤 */}
+                            <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-[10px] font-bold px-2 py-0.5 rounded-full ${activeSlideIndex === idx ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600 shadow-sm'}`}>
+                              {idx + 1}
+                            </div>
 
-                      {/* 新增頁面按鈕 */}
-                      <button 
-                        onClick={addSlide} 
-                        className="h-24 aspect-video rounded-lg border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50 flex flex-col items-center justify-center text-slate-400 hover:text-blue-600 transition-colors shrink-0 group ml-2"
-                      >
-                        <Plus className="w-6 h-6 mb-1 group-hover:scale-110 transition-transform" />
-                        <span className="text-xs font-bold">新增一頁</span>
-                      </button>
+                            {/* 刪除按鈕 (Hover 顯示) */}
+                            <button 
+                              onClick={(e) => { e.stopPropagation(); removeSlide(slide.id, idx); }} 
+                              className="absolute -top-2 -right-2 bg-red-100 text-red-600 p-1.5 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all shadow-sm z-20"
+                              title="刪除頁面"
+                              disabled={slides.length === 1}
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+
+                        {/* 新增頁面按鈕 */}
+                        <button 
+                          onClick={addSlide} 
+                          className="aspect-video rounded-lg border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50 flex flex-col items-center justify-center text-slate-400 hover:text-blue-600 transition-colors group"
+                        >
+                          <Plus className="w-6 h-6 mb-1 group-hover:scale-110 transition-transform" />
+                          <span className="text-xs font-bold">新增一頁</span>
+                        </button>
+                     </div>
                    </div>
                 </div>
 
